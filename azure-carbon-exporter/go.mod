@@ -3,7 +3,7 @@ module github.com/grafana/sustainability-o11y/azure-carbon-exporter
 go 1.25.0
 
 require (
-	cloud.google.com/go v0.121.6
+	cloud.google.com/go v0.123.0
 	cloud.google.com/go/bigquery v1.72.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.19.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.0
