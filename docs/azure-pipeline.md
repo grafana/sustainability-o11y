@@ -73,12 +73,20 @@ The exporter is a short-lived job (not a long-running server). Run it on a sched
 
 #### Using Docker
 
+Build the image from source (see [`azure-carbon-exporter/`](../azure-carbon-exporter/)):
+
+```bash
+cd azure-carbon-exporter && make build-image
+```
+
+Then run it:
+
 ```bash
 docker run \
   -e AZURE_TENANT_ID=your-tenant-id \
   -e AZURE_CLIENT_ID=your-client-id \
   -e AZURE_CLIENT_SECRET=your-client-secret \
-  us-docker.pkg.dev/grafanalabs-global/docker-deployment-tools-prod/azure-carbon-exporter:latest \
+  azure-carbon-exporter:latest \
   --subscriptions=subscription-id-1,subscription-id-2 \
   --bigquery.project-id=my-gcp-project \
   --bigquery.dataset=azure_carbon_emissions_prod \
