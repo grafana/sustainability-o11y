@@ -16,6 +16,6 @@ See [docs/gcp-pipeline.md](docs/gcp-pipeline.md).
 
 ### Azure
 
-Prometheus-compatible exporter for Azure carbon emissions data.
+Exporter that fetches Azure carbon emissions data from the Carbon Optimization API and writes it to BigQuery for Grafana to consume.
 
 See [docs/azure-pipeline.md](docs/azure-pipeline.md).
