@@ -4,7 +4,7 @@ module "gcp_carbon_pipeline" {
   # Required
   org_id             = "123456789012"
   project_id         = "my-gcp-project"
-  billing_account_id = "ABCDEF-123456-ABCDEF"
+  billing_account_ids = ["ABCDEF-123456-ABCDEF"]
 
   # Optional — override module defaults
   dataset_id         = "gcp_carbon_footprint"

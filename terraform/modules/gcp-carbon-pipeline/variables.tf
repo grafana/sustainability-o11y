@@ -8,9 +8,9 @@ variable "project_id" {
   type        = string
 }
 
-variable "billing_account_id" {
-  description = "GCP billing account ID to scope the carbon footprint export."
-  type        = string
+variable "billing_account_ids" {
+  description = "One or more GCP billing account IDs to scope the carbon footprint export."
+  type        = list(string)
 }
 
 variable "dataset_id" {

@@ -36,6 +36,6 @@ resource "google_bigquery_data_transfer_config" "gcp_carbon_footprint_transfer" 
   service_account_name   = google_service_account.gcp_climate_data.email
 
   params = {
-    billing_accounts = var.billing_account_id
+    billing_accounts = join(",", var.billing_account_ids)
   }
 }
