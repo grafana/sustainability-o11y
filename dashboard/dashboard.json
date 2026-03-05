@@ -50,15 +50,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -72,15 +72,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -94,10 +94,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -253,15 +253,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -275,10 +275,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -435,15 +435,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -457,10 +457,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -651,15 +651,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -673,15 +673,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -695,10 +695,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -795,15 +795,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -817,15 +817,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -839,10 +839,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -1009,16 +1009,16 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
                         "location": "",
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": "",
                         "sql": {
@@ -1049,15 +1049,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1071,10 +1071,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -1485,15 +1485,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1507,15 +1507,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1529,15 +1529,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1676,15 +1676,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1698,15 +1698,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1720,15 +1720,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 0,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1849,15 +1849,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1961,15 +1961,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -1986,7 +1986,7 @@
                       "group": "infinity-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_INFINITY}"
                       },
                       "spec": {
                         "columns": [
@@ -2181,10 +2181,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -2277,10 +2277,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -2415,10 +2415,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -2532,10 +2532,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": "bec6558e-c3b2-4e78-89d1-75cece7c6ccc"
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -2546,7 +2546,7 @@
                           "resultReuseMaxAgeInMinutes": 60
                         },
                         "format": 1,
-                        "rawSQL": "SELECT\n  location AS region,\n  SUM(total_scope_1_emissions_value) AS scope1,\n  SUM(total_scope_2_lbm_emissions_value) AS scope2,\n  SUM(total_scope_3_lbm_emissions_value) AS scope3\nFROM carbon.v3_0_0_data\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n\n"
+                        "rawSQL": ""
                       }
                     },
                     "refId": "A",
@@ -2647,10 +2647,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -2765,10 +2765,10 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-athena-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_ATHENA}"
                       },
                       "spec": {
                         "connectionArgs": {
@@ -2794,7 +2794,7 @@
                       "group": "infinity-datasource-1",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_INFINITY}"
                       },
                       "spec": {
                         "columns": [
@@ -2972,15 +2972,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -2994,15 +2994,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY_DEV}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -3127,15 +3127,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID_DEV}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -3149,15 +3149,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY_DEV}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID_DEV}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -3318,15 +3318,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -3340,15 +3340,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY_DEV}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID_DEV}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -3491,15 +3491,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
@@ -3513,15 +3513,15 @@
                   "spec": {
                     "query": {
                       "kind": "DataQuery",
-                      "group": "",
+                      "group": "grafana-bigquery-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": ""
+                        "name": "${DS_BIGQUERY_DEV}"
                       },
                       "spec": {
                         "editorMode": "code",
                         "format": 1,
-                        "project": "",
+                        "project": "${PROJECT_ID_DEV}",
                         "rawQuery": true,
                         "rawSql": ""
                       }
