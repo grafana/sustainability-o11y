@@ -2,10 +2,10 @@
   "apiVersion": "dashboard.grafana.app/v2beta1",
   "kind": "Dashboard",
   "metadata": {
-    "name": "lesxp6q",
-    "namespace": "stacks-27821",
-    "uid": "d2f37c72-4c31-46f3-9a11-1cda0ad61444",
-    "resourceVersion": "2029145410307621204",
+    "name": "",
+    "namespace": "",
+    "uid": "",
+    "resourceVersion": "",
     "generation": 20,
     "creationTimestamp": "2026-03-03T14:02:05Z"
   },
