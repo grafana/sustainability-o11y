@@ -28,7 +28,7 @@ See [docs/azure-pipeline.md](docs/azure-pipeline.md).
 |---------|------|------------|
 | CFE | Carbon-free energy | The percentage of renewable energy used as a proportion of total energy used. |
 | CO2 | Carbon dioxide | One of the most common greenhouse gases. |
-| CO2eq / CO2e | Carbon dioxide equivalent | Carbon is used as a common form of measurement for all greenhouse gases. This unit indicates the potential impact of non-CO2 gases on global warming in carbon terms. |
+| CO2eq / CO2e | Carbon dioxide equivalent | Carbon is used as a common form of measurement for all greenhouse gases. This unit indicates the potential impact of non-CO2 gases on global warming in carbon equivalent terms. |
 | gCO2eq/kWh | Grams of carbon per kilowatt hour | The standard unit of carbon intensity. |
 | GHGs | Greenhouse gases | Gases that trap heat from solar radiation in the Earth's atmosphere, increasing the temperature on the surface of the Earth. |
 | J | Joules | Energy is measured in joules (J). |
