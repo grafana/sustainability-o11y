@@ -22,3 +22,8 @@ output "glue_service_role_arn" {
   description = "ARN of the IAM role used by the Glue crawler."
   value       = aws_iam_role.glue_service_role.arn
 }
+
+output "s3_bucket_public_access_block_id" {
+  description = "ID of the public access block resource for the carbon S3 bucket."
+  value       = aws_s3_bucket_public_access_block.carbon.id
+}
