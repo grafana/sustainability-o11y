@@ -19,6 +19,24 @@ resource "google_bigquery_dataset" "gcp_carbon_footprint" {
     role          = "roles/bigquery.dataEditor"
     user_by_email = "service-${data.google_project.project.number}@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
   }
+
+  # Optional: grant Grafana dataViewer access to query the dataset
+  dynamic "access" {
+    for_each = var.grafana_service_account_email != null ? [var.grafana_service_account_email] : []
+    content {
+      role          = "roles/bigquery.dataViewer"
+      user_by_email = access.value
+    }
+  }
+
+  # Optional: additional IAM bindings (e.g. for other readers or tooling)
+  dynamic "access" {
+    for_each = var.additional_dataset_access
+    content {
+      role          = access.value.role
+      user_by_email = access.value.user_by_email
+    }
+  }
 }
 
 # NOTE: Before the first apply, the Carbon Footprint data source must be enrolled.

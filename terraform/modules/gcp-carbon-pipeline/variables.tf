@@ -30,3 +30,18 @@ variable "service_account_id" {
   type        = string
   default     = "gcp-climate-data"
 }
+
+variable "grafana_service_account_email" {
+  description = "Email of the Grafana service account to grant BigQuery dataViewer access. Leave null to skip."
+  type        = string
+  default     = null
+}
+
+variable "additional_dataset_access" {
+  description = "Additional IAM bindings to add to the BigQuery dataset. Each object requires role and user_by_email."
+  type = list(object({
+    role          = string
+    user_by_email = string
+  }))
+  default = []
+}
