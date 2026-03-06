@@ -23,7 +23,7 @@ variable "dataset_id" {
 variable "dataset_location" {
   description = "Location for the BigQuery dataset."
   type        = string
-  default     = "US"
+  default     = "us"
 }
 
 variable "service_account_id" {

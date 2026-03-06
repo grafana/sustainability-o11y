@@ -9,6 +9,6 @@ module "gcp_carbon_pipeline" {
 
   # Optional — override module defaults
   dataset_id         = "gcp_carbon_footprint"
-  dataset_location   = "US"
+  dataset_location   = "us"
   service_account_id = "gcp-climate-data"
 }
