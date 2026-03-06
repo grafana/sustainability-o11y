@@ -1,6 +1,7 @@
 variable "org_id" {
-  description = "GCP organization ID. Used to create org-level custom roles and IAM bindings."
+  description = "GCP organization ID. When set, creates org-level custom roles and IAM bindings required for the monthly data transfer. Leave null if roles are managed externally."
   type        = string
+  default     = null
 }
 
 variable "project_id" {
