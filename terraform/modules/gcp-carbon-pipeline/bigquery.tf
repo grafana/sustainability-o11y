@@ -16,7 +16,7 @@ resource "google_bigquery_dataset" "gcp_carbon_footprint" {
 
   # Service account that needs write access to deliver data into this dataset
   access {
-    role          = "roles/bigquery.dataEditor"
+    role          = "WRITER"
     user_by_email = "service-${data.google_project.project.number}@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
   }
 
@@ -24,7 +24,7 @@ resource "google_bigquery_dataset" "gcp_carbon_footprint" {
   dynamic "access" {
     for_each = var.grafana_service_account_email != null ? [var.grafana_service_account_email] : []
     content {
-      role          = "roles/bigquery.dataViewer"
+      role          = "READER"
       user_by_email = access.value
     }
   }
