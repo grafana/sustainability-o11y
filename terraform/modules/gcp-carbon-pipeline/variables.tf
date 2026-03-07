@@ -45,10 +45,11 @@ variable "grafana_service_account_email" {
 }
 
 variable "additional_dataset_access" {
-  description = "Additional IAM bindings to add to the BigQuery dataset. Each object requires role and user_by_email."
+  description = "Additional IAM bindings to add to the BigQuery dataset. Each object requires role and either user_by_email or group_by_email."
   type = list(object({
-    role          = string
-    user_by_email = string
+    role           = string
+    user_by_email  = optional(string)
+    group_by_email = optional(string)
   }))
   default = []
 }

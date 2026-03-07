@@ -41,8 +41,9 @@ resource "google_bigquery_dataset" "gcp_carbon_footprint" {
   dynamic "access" {
     for_each = var.additional_dataset_access
     content {
-      role          = access.value.role
-      user_by_email = access.value.user_by_email
+      role           = access.value.role
+      user_by_email  = access.value.user_by_email
+      group_by_email = access.value.group_by_email
     }
   }
 }
