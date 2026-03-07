@@ -20,7 +20,15 @@ resource "google_bigquery_dataset" "gcp_carbon_footprint" {
     user_by_email = "service-${data.google_project.project.number}@gcp-sa-bigquerydatatransfer.iam.gserviceaccount.com"
   }
 
-  # Optional: grant Grafana dataViewer access to query the dataset
+  dynamic "access" {
+    for_each = var.grafana_bigquery_data_source ? [google_service_account.grafana_bigquery_data_source[0].email] : []
+    content {
+      role          = "READER"
+      user_by_email = access.value
+    }
+  }
+
+  # Optional: grant an existing Grafana service account dataViewer access
   dynamic "access" {
     for_each = var.grafana_service_account_email != null ? [var.grafana_service_account_email] : []
     content {

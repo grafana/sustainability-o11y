@@ -32,8 +32,14 @@ variable "service_account_id" {
   default     = "gcp-climate-data"
 }
 
+variable "grafana_bigquery_data_source" {
+  description = "When true, creates a dedicated Grafana service account and grants it BigQuery dataViewer and jobUser roles."
+  type        = bool
+  default     = false
+}
+
 variable "grafana_service_account_email" {
-  description = "Email of the Grafana service account to grant BigQuery dataViewer access. Leave null to skip."
+  description = "Email of an existing Grafana service account to grant BigQuery dataViewer access. Leave null to skip."
   type        = string
   default     = null
 }
