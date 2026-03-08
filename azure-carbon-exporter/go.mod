@@ -9,7 +9,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/carbonoptimization/armcarbonoptimization v1.0.0
 	github.com/prometheus/client_golang v1.17.0
-	golang.org/x/sync v0.19.0
+	golang.org/x/sync v0.20.0
 	google.golang.org/api v0.269.0
 )
 
