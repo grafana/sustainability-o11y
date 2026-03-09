@@ -67,7 +67,7 @@ The dashboard is defined as code using the Grafana Foundation SDK. To generate t
 
 ```bash
 cd dashboard
-go run .
+go run ./export
 ```
 
-This outputs `carbon_emissions_report.json`, which can be imported in Grafana.
+This outputs `carbon_emissions_report.json` in the `dashboard/` directory, which can be imported in Grafana.
