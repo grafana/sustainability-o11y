@@ -47,15 +47,28 @@ Use the example in [`terraform/examples/gcp-carbon-pipeline`](../terraform/examp
 ```hcl
 module "gcp_carbon_pipeline" {
   source = "../../modules/gcp-carbon-pipeline"
- 
+
+  # Required
   project_id          = "my-gcp-project"
   billing_account_ids = ["ABCDEF-123456-ABCDEF"]
-  org_id = "123456789012"
+  org_id              = "123456789012"
 
-  # Optional — override module defaults
-  dataset_id         = "gcp_carbon_footprint"
-  dataset_location   = "us"
-  service_account_id = "gcp-climate-data"
+  # Optional - Override module defaults
+  # dataset_id             = "gcp_carbon_footprint"
+  # dataset_location       = "US"
+  # data_transfer_location = "US"
+  # service_account_id     = "gcp-climate-data"
+
+  # Optional - Enable permissions for service account for Grafana access
+  # Create new service account
+  # grafana_bigquery_data_source  = true
+  # Use existing service account
+  # grafana_service_account_email = "grafana@my-gcp-project.iam.gserviceaccount.com"
+
+  # Optional - Additional dataset access
+  # additional_dataset_access = [
+  #   { role = "READER", user_by_email = "other@my-gcp-project.iam.gserviceaccount.com" }
+  # ]
 }
 ```
 
@@ -63,7 +76,7 @@ module "gcp_carbon_pipeline" {
 
 ### Step 3: Connect Grafana to BigQuery
 
-Enable the Google BigQuery data source for Grafana with [these docs](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/). 
+Enable the Google BigQuery data source for Grafana with [these docs](https://grafana.com/grafana/plugins/grafana-bigquery-datasource/).
 
 To grant to an existing service account read access to the dataset, set `grafana_service_account_email` in the module:
 
@@ -85,22 +98,25 @@ Then you can import the carbon monitoring dashboard to visualize GCP emissions b
 
 ### Inputs
 
-| Variable | Type | Default | Description |
-|----------|------|---------|-------------|
-| `project_id` | `string` | required | GCP project ID where BigQuery and Data Transfer resources will be created |
-| `billing_account_ids` | `list(string)` | required | One or more GCP billing account IDs to scope the carbon footprint export |
-| `org_id` | `string` | `null` | GCP organization ID. When set, creates org-level custom roles and IAM bindings required for the Data Transfer. Leave null if roles are managed externally |
-| `dataset_id` | `string` | `"gcp_carbon_footprint"` | BigQuery dataset ID to create for the carbon footprint export |
-| `dataset_location` | `string` | `"us"` | Location for the BigQuery dataset |
-| `service_account_id` | `string` | `"gcp-climate-data"` | Account ID for the service account that runs the Data Transfer |
-| `grafana_bigquery_data_source` | `bool` | `false` | When true, creates a dedicated `grafana-bigquery-datasource` service account and grants it `dataViewer` and `jobUser` roles |
-| `grafana_service_account_email` | `string` | `null` | Email of an existing Grafana service account to grant BigQuery dataViewer access. Leave null to skip |
-| `additional_dataset_access` | `list(object)` | `[]` | Additional IAM bindings to add to the BigQuery dataset. Each object requires `role` and `user_by_email` |
+| Variable                        | Type           | Default                  | Description                                                                                                                                               |
+|---------------------------------|----------------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `project_id`                    | `string`       | required                 | GCP project ID where BigQuery and Data Transfer resources will be created                                                                                 |
+| `billing_account_ids`           | `list(string)` | required                 | One or more GCP billing account IDs to scope the carbon footprint export                                                                                  |
+| `org_id`                        | `string`       | `null`                   | GCP organization ID. When set, creates org-level custom roles and IAM bindings required for the Data Transfer. Leave null if roles are managed externally |
+| `dataset_id`                    | `string`       | `"gcp_carbon_footprint"` | BigQuery dataset ID to create for the carbon footprint export                                                                                             |
+| `dataset_location`              | `string`       | `"US"`                   | Location for the BigQuery dataset                                                                                                                         |
+| `data_transfer_location`        | `string`       | `"US"`                   | Location for the BigQuery Data Transfer config. Should match the dataset location                                                                         |
+| `service_account_id`            | `string`       | `"gcp-climate-data"`     | Account ID for the service account that runs the Data Transfer                                                                                            |
+| `grafana_bigquery_data_source`  | `bool`         | `false`                  | When true, creates a dedicated `grafana-bigquery-datasource` service account and grants it `READER` on the dataset and `jobUser` on the project           |
+| `grafana_service_account_email` | `string`       | `null`                   | Email of an existing Grafana service account to grant `READER` on the dataset and `jobUser` on the project. Leave null to skip                            |
+| `additional_dataset_access`     | `list(object)` | `[]`                     | Additional IAM bindings to add to the BigQuery dataset. Each object requires `role` and either `user_by_email` or `group_by_email`                        |
 
 ### Outputs
 
 | Output | Description |
 |--------|-------------|
+| `bigquery_dataset_id` | ID of the BigQuery dataset receiving the carbon footprint export |
+| `data_transfer_name` | Resource name of the BigQuery Data Transfer config |
 | `grafana_service_account_email` | Email of the created Grafana service account. Null if `grafana_bigquery_data_source` is false |
 
 ## Metrics / Data Fields
