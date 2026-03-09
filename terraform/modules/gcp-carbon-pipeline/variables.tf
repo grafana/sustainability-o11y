@@ -23,6 +23,12 @@ variable "dataset_id" {
 variable "dataset_location" {
   description = "Location for the BigQuery dataset."
   type        = string
+  default     = "US"
+}
+
+variable "data_transfer_location" {
+  description = "Location for the BigQuery Data Transfer config. Should match the dataset location."
+  type        = string
   default     = "us"
 }
 

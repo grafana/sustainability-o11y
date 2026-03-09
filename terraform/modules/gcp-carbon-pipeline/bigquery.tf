@@ -57,6 +57,7 @@ resource "google_bigquery_dataset" "gcp_carbon_footprint" {
 
 resource "google_bigquery_data_transfer_config" "gcp_carbon_footprint_transfer" {
   project                = var.project_id
+  location               = var.data_transfer_location
   display_name           = var.dataset_id
   data_source_id         = "61cede5a-0000-2440-ad42-883d24f8f7b8"
   destination_dataset_id = google_bigquery_dataset.gcp_carbon_footprint.dataset_id
