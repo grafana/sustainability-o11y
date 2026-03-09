@@ -46,11 +46,10 @@ These are picker dropdowns — select the matching data source connection you ha
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `bigquery_project` | The GCP project ID where your BigQuery datasets live | `my-gcp-project` |
 | `gcp_dataset` | BigQuery dataset containing GCP carbon footprint data | `gcp_carbon_footprint` |
 | `azure_dataset` | BigQuery dataset containing Azure carbon emissions data | `azure_carbon_emissions` |
 
-The GCP dataset name defaults to `gcp_carbon_footprint`, which is the default created by the [GCP Terraform module](gcp-pipeline.md). The Azure dataset name should match the `--bigquery.dataset` flag used when running the [azure-carbon-exporter](azure-pipeline.md).
+Queries use the default project configured in your BigQuery data source connection — no project ID variable is needed. The GCP dataset name defaults to `gcp_carbon_footprint`, which is the default created by the [GCP Terraform module](gcp-pipeline.md). The Azure dataset name should match the `--bigquery.dataset` flag used when running the [azure-carbon-exporter](azure-pipeline.md).
 
 ### Athena configuration
 
