@@ -29,7 +29,7 @@ variable "dataset_location" {
 variable "data_transfer_location" {
   description = "Location for the BigQuery Data Transfer config. Should match the dataset location."
   type        = string
-  default     = "us"
+  default     = "US"
 }
 
 variable "service_account_id" {
