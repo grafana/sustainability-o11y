@@ -20,6 +20,9 @@ Exporter that fetches Azure carbon emissions data from the Carbon Optimization A
 
 See [docs/azure-pipeline.md](docs/azure-pipeline.md).
 
+## Project Maturity
+This project is in active development and subject to change. Grafana Labs builds and maintains this project as part of our commitment to sustainability and the open source community, but it is provided without support.
+
 ## Carbon Concepts
 
 ### Glossary
