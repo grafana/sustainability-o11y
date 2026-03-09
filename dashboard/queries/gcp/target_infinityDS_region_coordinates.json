@@ -1,0 +1,38 @@
+{
+    "datasource": {
+      "uid": "${infinity_ds}",
+      "type": "yesoreyeram-infinity-datasource"
+    },
+    "refId": "B",
+    "hide": false,
+    "type": "json",
+    "source": "inline",
+    "format": "table",
+    "url": "",
+    "url_options": {
+      "method": "GET",
+      "data": ""
+    },
+    "root_selector": "",
+    "columns": [
+      {
+        "text": "region",
+        "selector": "region",
+        "type": "string"
+      },
+      {
+        "text": "latitude",
+        "selector": "latitude",
+        "type": "string"
+      },
+      {
+        "text": "longitude",
+        "selector": "longitude",
+        "type": "string"
+      }
+    ],
+    "filters": [],
+    "global_query_id": "",
+    "parser": "backend",
+    "data": "[\n  {\n    \"region\": \"af-south1\",\n    \"latitude\": -33.9249,\n    \"longitude\": 18.4241\n  },\n  {\n    \"region\": \"ap-northeast1\",\n    \"latitude\": 35.6895,\n    \"longitude\": 139.6917\n  },\n  {\n    \"region\": \"ap-northeast2\",\n    \"latitude\": 37.5665,\n    \"longitude\": 126.978\n  },\n  {\n    \"region\": \"ap-south1\",\n    \"latitude\": 19.076,\n    \"longitude\": 72.8777\n  },\n  {\n    \"region\": \"ap-south2\",\n    \"latitude\": 12.9716,\n    \"longitude\": 77.5946\n  },\n  {\n    \"region\": \"ap-southeast1\",\n    \"latitude\": 1.3521,\n    \"longitude\": 103.8198\n  },\n  {\n    \"region\": \"ap-southeast2\",\n    \"latitude\": -33.8688,\n    \"longitude\": 151.2093\n  },\n  {\n    \"region\": \"ap-southeast3\",\n    \"latitude\": -6.2088,\n    \"longitude\": 106.8456\n  },\n  {\n    \"region\": \"asia-south1\",\n    \"latitude\": 28.6139,\n    \"longitude\": 77.209\n  },\n  {\n    \"region\": \"asia-southeast1\",\n    \"latitude\": 13.7563,\n    \"longitude\": 100.5018\n  },\n  {\n    \"region\": \"australia-southeast1\",\n    \"latitude\": -37.8136,\n    \"longitude\": 144.9631\n  },\n  {\n    \"region\": \"ca-central1\",\n    \"latitude\": 45.4215,\n    \"longitude\": -75.6991\n  },\n  {\n    \"region\": \"ca-west1\",\n    \"latitude\": 49.2827,\n    \"longitude\": -123.1207\n  },\n  {\n    \"region\": \"centralus\",\n    \"latitude\": 41.5908,\n    \"longitude\": -93.6208\n  },\n  {\n    \"region\": \"eu-central1\",\n    \"latitude\": 50.1109,\n    \"longitude\": 8.6821\n  },\n  {\n    \"region\": \"eu-central2\",\n    \"latitude\": 47.3769,\n    \"longitude\": 8.5417\n  },\n  {\n    \"region\": \"eu-north1\",\n    \"latitude\": 59.3293,\n    \"longitude\": 18.0686\n  },\n  {\n    \"region\": \"eu-south2\",\n    \"latitude\": 41.9028,\n    \"longitude\": 12.4964\n  },\n  {\n    \"region\": \"eu-west2\",\n    \"latitude\": 51.5074,\n    \"longitude\": -0.1278\n  },\n  {\n    \"region\": \"eu-west3\",\n    \"latitude\": 48.8566,\n    \"longitude\": 2.3522\n  },\n  {\n    \"region\": \"europe-west1\",\n    \"latitude\": 52.3667,\n    \"longitude\": 4.8945\n  },\n  {\n    \"region\": \"europe-west2\",\n    \"latitude\": 53.483,\n    \"longitude\": -2.241\n  },\n  {\n    \"region\": \"me-central1\",\n    \"latitude\": 25.277,\n    \"longitude\": 55.2962\n  },\n  {\n    \"region\": \"me-central2\",\n    \"latitude\": 24.7136,\n    \"longitude\": 46.6753\n  },\n  {\n    \"region\": \"sa-east1\",\n    \"latitude\": -23.5505,\n    \"longitude\": -46.6333\n  },\n  {\n    \"region\": \"southamerica-east1\",\n    \"latitude\": -23.5338,\n    \"longitude\": -46.6253\n  },\n  {\n    \"region\": \"us-central1\",\n    \"latitude\": 41.2619,\n    \"longitude\": -95.8608\n  },\n  {\n    \"region\": \"us-east1\",\n    \"latitude\": 33.196,\n    \"longitude\": -80.0131\n  },\n  {\n    \"region\": \"us-east2\",\n    \"latitude\": 40.4173,\n    \"longitude\": -82.9071\n  },\n  {\n    \"region\": \"us-east4\",\n    \"latitude\": 33.749,\n    \"longitude\": -84.388\n  },\n  {\n    \"region\": \"us-west1\",\n    \"latitude\": 36.7783,\n    \"longitude\": -119.4179\n  },\n  {\n    \"region\": \"us-west2\",\n    \"latitude\": 45.5051,\n    \"longitude\": -122.675\n  },\n  {\n    \"region\": \"westeurope\",\n    \"latitude\": 52.3676,\n    \"longitude\": 4.9041\n  },\n{ \"region\": \"us-west3\", \"latitude\": 40.7608, \"longitude\": -111.8910 },  \n{ \"region\": \"europe-west4\", \"latitude\": 53.4386, \"longitude\": 6.8355 },  \n{ \"region\": \"us-west4\", \"latitude\": 36.1699, \"longitude\": -115.1398 }  \n]"
+  }
