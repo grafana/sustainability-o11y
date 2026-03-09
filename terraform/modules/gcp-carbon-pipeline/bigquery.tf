@@ -61,7 +61,6 @@ resource "google_bigquery_data_transfer_config" "gcp_carbon_footprint_transfer" 
   display_name           = var.dataset_id
   data_source_id         = "61cede5a-0000-2440-ad42-883d24f8f7b8"
   destination_dataset_id = google_bigquery_dataset.gcp_carbon_footprint.dataset_id
-  service_account_name   = google_service_account.gcp_climate_data.email
 
   params = {
     billing_accounts = join(",", var.billing_account_ids)
