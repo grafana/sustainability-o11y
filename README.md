@@ -2,6 +2,10 @@
 
 This repo houses everything related to sustainability observability at Grafana: data pipelines, dashboards, and documentation for collecting and visualizing cloud carbon emissions across the Cloud Service Providers AWS, GCP, and Azure.
 
+## Dashboard
+
+The Carbon Emissions Report dashboard visualises emissions from GCP, AWS, and Azure in one view. See [docs/dashboard.md](docs/dashboard.md) for setup instructions, required plugins, and how to configure the template variables.
+
 ## Data Pipelines
 
 ### AWS
