@@ -1,0 +1,69 @@
+# When an issue or PR gets the "s11y" label, add it to project 1063.
+# Runs in any grafana org repo that has this workflow (e.g. copy to deployment_tools).
+#
+# Requires: PROJECT_BOARD_TOKEN (PAT with `project` scope) as repo or org secret.
+
+name: Add s11y items to project board
+
+on:
+  issues:
+    types: [labeled]
+  pull_request:
+    types: [labeled]
+
+jobs:
+  add-to-board:
+    runs-on: ubuntu-latest
+    if: |
+      github.repository_owner == 'grafana' &&
+      ((github.event_name == 'issues' && github.event.label.name == 's11y') ||
+       (github.event_name == 'pull_request' && github.event.label.name == 's11y'))
+    steps:
+      - name: Get content ID and check if already on board
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          CONTENT_ID="${{ github.event.issue.node_id || github.event.pull_request.node_id }}"
+          echo "content_id=$CONTENT_ID" >> $GITHUB_OUTPUT
+
+          # Check if this issue/PR is already on project 1063
+          RESP=$(gh api graphql -f query='
+            query {
+              organization(login: "grafana") {
+                projectV2(number: 1063) {
+                  items(first: 100) {
+                    nodes {
+                      id
+                      content { ... on PullRequest { id } ... on Issue { id } }
+                    }
+                  }
+                }
+              }
+            }
+          ')
+          ALREADY=$(echo "$RESP" | jq -r --arg c "$CONTENT_ID" '
+            .data.organization.projectV2.items.nodes[]
+            | select(.content.id == $c) | .id
+          ')
+          echo "already_item_id=$ALREADY" >> $GITHUB_OUTPUT
+
+      - name: Add to project 1063
+        if: steps.check.outputs.already_item_id == ''
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            mutation($projectId: ID!, $contentId: ID!) {
+              addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                item { id }
+              }
+            }
+          ' \
+            -f projectId="PVT_kwDOAG3Mbc4BRNdl" \
+            -f contentId="${{ steps.check.outputs.content_id }}"
+          echo "Added ${{ github.event.issue.number || github.event.pull_request.number }} to project 1063"
+
+      - name: Already on board
+        if: steps.check.outputs.already_item_id != ''
+        run: echo "Item already on project 1063, skipping"

@@ -1,0 +1,127 @@
+# Sync project 1063 Status from PR state:
+# - When a PR has review requested or a review submitted → "In review"
+# - When a PR is merged → "Done"
+# Only affects PRs that are already on the board.
+#
+# Requires: Add secret PROJECT_BOARD_TOKEN (PAT with `project` scope) to this repo
+# or to the grafana org.
+
+name: Sync project board status
+
+on:
+  pull_request:
+    types: [review_requested, ready_for_review, submitted, closed]
+
+jobs:
+  set-in-review:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.repo.owner.login == 'grafana' && github.event.action != 'closed'
+    steps:
+      - name: Get PR node ID and find project item
+        id: get-ids
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NODE_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name: $repo) {
+                pullRequest(number: $number) { id }
+              }
+            }
+          ' -f owner="${{ github.repository_owner }}" -f repo="${{ github.event.repository.name }}" -f number="${{ github.event.pull_request.number }}" --jq '.data.repository.pullRequest.id')
+          echo "pr_node_id=$PR_NODE_ID" >> $GITHUB_OUTPUT
+
+          # Find project item for this PR in project 1063
+          RESP=$(gh api graphql -f query='
+            query {
+              organization(login: "grafana") {
+                projectV2(number: 1063) {
+                  items(first: 100) {
+                    nodes {
+                      id
+                      content { ... on PullRequest { id } }
+                    }
+                  }
+                }
+              }
+            }
+          ')
+          ITEM_ID=$(echo "$RESP" | jq -r --arg pr "$PR_NODE_ID" '.data.organization.projectV2.items.nodes[] | select(.content.id == $pr) | .id')
+          echo "item_id=$ITEM_ID" >> $GITHUB_OUTPUT
+
+      - name: Set Status to In review
+        if: steps.get-ids.outputs.item_id != ''
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $projectId,
+                itemId: $itemId,
+                fieldId: $fieldId,
+                value: { singleSelectOptionId: $optionId }
+              }) { projectV2Item { id } }
+            }
+          ' \
+            -f projectId="PVT_kwDOAG3Mbc4BRNdl" \
+            -f itemId="${{ steps.get-ids.outputs.item_id }}" \
+            -f fieldId="PVTSSF_lADOAG3Mbc4BRNdlzg_Gr1Y" \
+            -f optionId="df73e18b"
+          echo "Set Status to In review for project item ${{ steps.get-ids.outputs.item_id }}"
+
+  set-done-on-merge:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.repo.owner.login == 'grafana' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: Get PR node ID and find project item
+        id: get-ids
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NODE_ID=$(gh api graphql -f query='
+            query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name: $repo) {
+                pullRequest(number: $number) { id }
+              }
+            }
+          ' -f owner="${{ github.repository_owner }}" -f repo="${{ github.event.repository.name }}" -f number="${{ github.event.pull_request.number }}" --jq '.data.repository.pullRequest.id')
+          echo "pr_node_id=$PR_NODE_ID" >> $GITHUB_OUTPUT
+
+          RESP=$(gh api graphql -f query='
+            query {
+              organization(login: "grafana") {
+                projectV2(number: 1063) {
+                  items(first: 100) {
+                    nodes {
+                      id
+                      content { ... on PullRequest { id } }
+                    }
+                  }
+                }
+              }
+            }
+          ')
+          ITEM_ID=$(echo "$RESP" | jq -r --arg pr "$PR_NODE_ID" '.data.organization.projectV2.items.nodes[] | select(.content.id == $pr) | .id')
+          echo "item_id=$ITEM_ID" >> $GITHUB_OUTPUT
+
+      - name: Set Status to Done
+        if: steps.get-ids.outputs.item_id != ''
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $projectId,
+                itemId: $itemId,
+                fieldId: $fieldId,
+                value: { singleSelectOptionId: $optionId }
+              }) { projectV2Item { id } }
+            }
+          ' \
+            -f projectId="PVT_kwDOAG3Mbc4BRNdl" \
+            -f itemId="${{ steps.get-ids.outputs.item_id }}" \
+            -f fieldId="PVTSSF_lADOAG3Mbc4BRNdlzg_Gr1Y" \
+            -f optionId="98236657"
+          echo "Set Status to Done for project item ${{ steps.get-ids.outputs.item_id }}"
