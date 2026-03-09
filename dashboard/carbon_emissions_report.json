@@ -34,10 +34,9 @@
       "type": "stat",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${bigquery_project}.${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
           "editorMode": "code",
           "refId": "GCP",
           "datasource": {
@@ -62,10 +61,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
           "editorMode": "code",
           "refId": "Azure",
           "datasource": {
@@ -137,10 +135,9 @@
       "type": "barchart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as metric_tons_CO2eq,\n  usage_month,\nFROM\n  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    usage_month\n  ORDER BY usage_month ASC\n  LIMIT 1000;\n",
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as metric_tons_CO2eq,\n  usage_month,\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    usage_month\n  ORDER BY usage_month ASC\n  LIMIT 1000;\n",
           "editorMode": "code",
           "refId": "GCP",
           "hide": false,
@@ -166,10 +163,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    usage_month,\n    SUM(emissions_kg_co2e) / 1000 AS metric_tons_CO2eq\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n",
+          "rawSql": "SELECT\n    usage_month,\n    SUM(emissions_kg_co2e) / 1000 AS metric_tons_CO2eq\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n",
           "editorMode": "code",
           "refId": "Azure",
           "hide": false,
@@ -335,10 +331,9 @@
       "type": "stat",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${bigquery_project}.${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
           "editorMode": "code",
           "refId": "GCP",
           "datasource": {
@@ -363,10 +358,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
           "editorMode": "code",
           "refId": "Azure",
           "datasource": {
@@ -667,10 +661,9 @@
       "id": 13,
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as scope3\nFROM `${bigquery_project}.${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
+          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as scope3\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
           "editorMode": "code",
           "refId": "Scope 3 (GCP)",
           "datasource": {
@@ -679,10 +672,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
           "editorMode": "code",
           "refId": "Azure Scope 3",
           "datasource": {
@@ -827,10 +819,9 @@
       "id": 14,
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as scope2\nFROM `${bigquery_project}.${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
+          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as scope2\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
           "editorMode": "code",
           "refId": "Scope 2",
           "datasource": {
@@ -855,10 +846,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
           "editorMode": "code",
           "refId": "Azure Scope 2",
           "datasource": {
@@ -992,10 +982,9 @@
       "id": 15,
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as scope1\nFROM `${bigquery_project}.${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
+          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as scope1\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
           "editorMode": "code",
           "refId": "Scope 1",
           "datasource": {
@@ -1020,10 +1009,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
           "editorMode": "code",
           "refId": "Azure Scope 1",
           "datasource": {
@@ -1165,10 +1153,9 @@
       "type": "piechart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n\n",
+          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n\n",
           "editorMode": "code",
           "refId": "Scope 1",
           "datasource": {
@@ -1177,10 +1164,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
+          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
           "editorMode": "code",
           "refId": "Scope 2",
           "hide": false,
@@ -1190,10 +1176,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
+          "rawSql": "SELECT\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
           "editorMode": "code",
           "refId": "Scope 3",
           "hide": false,
@@ -1316,10 +1301,9 @@
       "type": "barchart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n\n",
+          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n\n",
           "editorMode": "code",
           "refId": "Scope 1",
           "datasource": {
@@ -1328,10 +1312,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
+          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
           "editorMode": "code",
           "refId": "Scope 2",
           "hide": false,
@@ -1341,10 +1324,9 @@
           }
         },
         {
-          "project": "${bigquery_project}",
           "format": 0,
           "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
+          "rawSql": "SELECT\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
           "editorMode": "code",
           "refId": "Scope 3",
           "hide": false,
@@ -1450,10 +1432,9 @@
       "type": "barchart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  --`location`.`location`,\n  --`location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  `service`.`description`,\n  --`service`.`id`\nFROM\n  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    --location.region,\n    service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 10;\n",
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  --`location`.`location`,\n  --`location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  `service`.`description`,\n  --`service`.`id`\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    --location.region,\n    service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 10;\n",
           "editorMode": "code",
           "refId": "A",
           "datasource": {
@@ -1543,10 +1524,9 @@
       "type": "geomap",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  -- usage_month,\n  --`location`.`location`,\n  `location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  --`service`.`description`,\n  --`service`.`id`\nFROM\n  `${bigquery_project}.${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    location.region\n    --service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 15;\n",
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  -- usage_month,\n  --`location`.`location`,\n  `location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  --`service`.`description`,\n  --`service`.`id`\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    location.region\n    --service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 15;\n",
           "editorMode": "code",
           "refId": "A",
           "datasource": {
@@ -2420,10 +2400,9 @@
       "type": "piechart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "rawSql": "SELECT\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
           "editorMode": "code",
           "refId": "Prod",
           "datasource": {
@@ -2528,10 +2507,9 @@
       "type": "barchart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "SELECT\n    usage_month AS time,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n\n",
+          "rawSql": "SELECT\n    usage_month AS time,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n\n",
           "editorMode": "code",
           "refId": "Prod",
           "datasource": {
@@ -2671,10 +2649,9 @@
       "type": "table",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "SELECT\n  location AS region,\n  SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1,\n  SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2,\n  SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND location IS NOT NULL\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n",
+          "rawSql": "SELECT\n  location AS region,\n  SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1,\n  SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2,\n  SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND location IS NOT NULL\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n",
           "editorMode": "code",
           "refId": "Prod",
           "datasource": {
@@ -2794,10 +2771,9 @@
       "type": "barchart",
       "targets": [
         {
-          "project": "${bigquery_project}",
           "format": 1,
           "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(emissions_kg_co2e) / 1000 AS total_carbon_footprint,\n  resource_type\nFROM `${bigquery_project}.${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND resource_type IS NOT NULL\nGROUP BY resource_type\nORDER BY total_carbon_footprint DESC\nLIMIT 10\n",
+          "rawSql": "SELECT\n  SUM(emissions_kg_co2e) / 1000 AS total_carbon_footprint,\n  resource_type\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND resource_type IS NOT NULL\nGROUP BY resource_type\nORDER BY total_carbon_footprint DESC\nLIMIT 10\n",
           "editorMode": "code",
           "refId": "Prod",
           "datasource": {
@@ -2909,19 +2885,6 @@
   ],
   "templating": {
     "list": [
-      {
-        "type": "textbox",
-        "name": "bigquery_project",
-        "label": "BigQuery Project ID",
-        "skipUrlSync": false,
-        "query": "",
-        "multi": false,
-        "allowCustomValue": true,
-        "includeAll": false,
-        "auto": false,
-        "auto_min": "10s",
-        "auto_count": 30
-      },
       {
         "type": "textbox",
         "name": "gcp_dataset",

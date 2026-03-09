@@ -36,9 +36,6 @@ func GetBuilder() *dashboard.DashboardBuilder {
 		Time("now-365d", "now").
 		Timezone("utc").
 		Variables([]cog.Builder[dashboard.VariableModel]{
-			dashboard.NewTextBoxVariableBuilder("bigquery_project").
-				Label("BigQuery Project ID").
-				DefaultValue(dashboard.StringOrMap{String: cog.ToPtr("")}),
 			dashboard.NewTextBoxVariableBuilder("gcp_dataset").
 				Label("GCP BigQuery Dataset").
 				DefaultValue(dashboard.StringOrMap{String: cog.ToPtr("")}),
@@ -159,7 +156,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			Id(14).
 			Datasource(mixedDSRef).
 			WithTarget(bigqueryRaw(scope2Query).
-				Project("${bigquery_project}").
 				Format(0).
 				RefId("Scope 2").
 				Datasource(bigQueryDSRef)).
@@ -170,7 +166,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 				RawSQL(awsScope2TotalQuery).
 				Datasource(athenaDSRef)).
 			WithTarget(bigqueryRaw(azureScope2TotalQuery).
-				Project("${bigquery_project}").
 				Format(0).
 				RefId("Azure Scope 2").
 				Datasource(bigQueryDSRef)).
@@ -230,7 +225,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			Height(12).
 			Span(6).
 			WithTarget(bigqueryRaw(scope1Query).
-				Project("${bigquery_project}").
 				Format(0).
 				RefId("Scope 1").
 				Datasource(bigQueryDSRef)).
@@ -241,7 +235,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 				RawSQL(awsScope1TotalQuery).
 				Datasource(athenaDSRef)).
 			WithTarget(bigqueryRaw(azureScope1TotalQuery).
-				Project("${bigquery_project}").
 				Format(0).
 				RefId("Azure Scope 1").
 				Datasource(bigQueryDSRef)).
@@ -298,14 +291,12 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(piechart.NewPanelBuilder().
 			Datasource(bigQueryDSRef).
 			WithTarget(bigqueryRaw(scope1QueryWithUsage).
-				Project("${bigquery_project}").
 				Format(0).
 				EditorMode("code").
 				RefId("Scope 1").
 				Datasource(bigQueryDSRef),
 			).
 			WithTarget(bigqueryRaw(scope2QueryWithUsage).
-				Project("${bigquery_project}").
 				Format(0).
 				EditorMode("code").
 				RefId("Scope 2").
@@ -313,7 +304,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 				Datasource(bigQueryDSRef),
 			).
 			WithTarget(bigqueryRaw(scope3QueryWithUsage).
-				Project("${bigquery_project}").
 				Format(0).
 				EditorMode("code").
 				RefId("Scope 3").
@@ -352,14 +342,12 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(barchart.NewPanelBuilder().
 			Datasource(bigQueryDSRef).
 			WithTarget(bigqueryRaw(scope1QueryWithUsage).
-				Project("${bigquery_project}").
 				Format(0).
 				EditorMode("code").
 				RefId("Scope 1").
 				Datasource(bigQueryDSRef),
 			).
 			WithTarget(bigqueryRaw(scope2QueryWithUsage).
-				Project("${bigquery_project}").
 				Format(0).
 				EditorMode("code").
 				RefId("Scope 2").
@@ -367,7 +355,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 				Datasource(bigQueryDSRef),
 			).
 			WithTarget(bigqueryRaw(scope3QueryWithUsage).
-				Project("${bigquery_project}").
 				Format(0).
 				EditorMode("code").
 				RefId("Scope 3").
@@ -417,7 +404,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(barchart.NewPanelBuilder().
 			Datasource(bigQueryDSRef).
 			WithTarget(bigqueryRaw(gcpCarbonServiceQuery).
-				Project("${bigquery_project}").
 				Format(1).
 				EditorMode("code").
 				RefId("A").
@@ -461,7 +447,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(geomap.NewPanelBuilder().
 			Datasource(mixedDSRef).
 			WithTarget(bigqueryRaw(gcpCarbonRegionQuery).
-				Project("${bigquery_project}").
 				Format(1).
 				EditorMode("code").
 				RefId("A").
@@ -750,7 +735,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(piechart.NewPanelBuilder().
 			Datasource(mixedDSRef).
 			WithTarget(bigqueryRaw(azureScopeEmissionsQuery).
-				Project("${bigquery_project}").
 				Format(1).
 				EditorMode("code").
 				RefId("Prod").
@@ -796,7 +780,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(barchart.NewPanelBuilder().
 			Datasource(mixedDSRef).
 			WithTarget(bigqueryRaw(azureMonthlyScopeEmissionsQuery).
-				Project("${bigquery_project}").
 				Format(1).
 				EditorMode("code").
 				RefId("Prod").
@@ -855,7 +838,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(table.NewPanelBuilder().
 			Datasource(mixedDSRef).
 			WithTarget(bigqueryRaw(azureRegionTableQuery).
-				Project("${bigquery_project}").
 				Format(1).
 				EditorMode("code").
 				RefId("Prod").
@@ -888,7 +870,6 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(barchart.NewPanelBuilder().
 			Datasource(mixedDSRef).
 			WithTarget(bigqueryRaw(azureResourceTypeQuery).
-				Project("${bigquery_project}").
 				Format(1).
 				EditorMode("code").
 				RefId("Prod").
@@ -945,7 +926,6 @@ func buildTotalCarbonPanel() *stat.PanelBuilder {
 	return stat.NewPanelBuilder().
 		Datasource(mixedDSRef).
 		WithTarget(bigqueryRaw(gcpTotalQuery).
-			Project("${bigquery_project}").
 			RefId("GCP").
 			Datasource(bigQueryDSRef),
 		).
@@ -956,7 +936,6 @@ func buildTotalCarbonPanel() *stat.PanelBuilder {
 			RawSQL(awsTotalQuery).
 			Datasource(athenaDSRef)).
 		WithTarget(bigqueryRaw(azureTotalQuery).
-			Project("${bigquery_project}").
 			RefId("Azure").
 			Datasource(bigQueryDSRef),
 		).
@@ -988,7 +967,6 @@ func buildEmissionsBySourcePanel() *barchart.PanelBuilder {
 	return barchart.NewPanelBuilder().
 		Datasource(mixedDSRef).
 		WithTarget(bigqueryRaw(gcpMonthlyRegionQuery).
-			Project("${bigquery_project}").
 			RefId("GCP").
 			Hide(false).
 			Datasource(bigQueryDSRef),
@@ -1000,7 +978,6 @@ func buildEmissionsBySourcePanel() *barchart.PanelBuilder {
 			RawSQL(awsMonthlyTotalQuery).
 			Datasource(athenaDSRef)).
 		WithTarget(bigqueryRaw(azureMonthlyTotalQuery).
-			Project("${bigquery_project}").
 			RefId("Azure").
 			Hide(false).
 			Datasource(bigQueryDSRef),
@@ -1057,7 +1034,6 @@ func buildTripsAroundWorldPanel() *stat.PanelBuilder {
 	return stat.NewPanelBuilder().
 		Datasource(mixedDSRef).
 		WithTarget(bigqueryRaw(gcpTotalQuery).
-			Project("${bigquery_project}").
 			RefId("GCP").
 			Datasource(bigQueryDSRef),
 		).
@@ -1068,7 +1044,6 @@ func buildTripsAroundWorldPanel() *stat.PanelBuilder {
 			RawSQL(awsTotalQuery).
 			Datasource(athenaDSRef)).
 		WithTarget(bigqueryRaw(azureTotalQuery).
-			Project("${bigquery_project}").
 			RefId("Azure").
 			Datasource(bigQueryDSRef),
 		).
@@ -1107,12 +1082,10 @@ func buildScope3Panel() *barchart.PanelBuilder {
 		Id(13).
 		Datasource(mixedDSRef).
 		WithTarget(bigqueryRaw(scope3Query).
-			Project("${bigquery_project}").
 			Format(0).
 			RefId("Scope 3 (GCP)").
 			Datasource(bigQueryDSRef)).
 		WithTarget(bigqueryRaw(azureScope3TotalQuery).
-			Project("${bigquery_project}").
 			Format(0).
 			RefId("Azure Scope 3").
 			Datasource(bigQueryDSRef)).

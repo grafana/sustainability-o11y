@@ -8,7 +8,7 @@ SELECT
   --`service`.`description`,
   --`service`.`id`
 FROM
-  `${bigquery_project}.${gcp_dataset}.carbon_footprint`
+  `${gcp_dataset}.carbon_footprint`
   WHERE $__timeFilter(TIMESTAMP(usage_month))
   GROUP BY
     -- usage_month,
