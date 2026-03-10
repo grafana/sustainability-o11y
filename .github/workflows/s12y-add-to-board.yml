@@ -1,9 +1,9 @@
-# When an issue or PR gets the "s11y" label, add it to project 1063.
+# When an issue or PR gets the "s12y" label, add it to project 1063.
 # Runs in any grafana org repo that has this workflow (e.g. copy to deployment_tools).
 #
 # Requires: PROJECT_BOARD_TOKEN (PAT with `project` scope) as repo or org secret.
 
-name: Add s11y items to project board
+name: Add s12y items to project board
 
 on:
   issues:
@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.repository_owner == 'grafana' &&
-      ((github.event_name == 'issues' && github.event.label.name == 's11y') ||
-       (github.event_name == 'pull_request' && github.event.label.name == 's11y'))
+      ((github.event_name == 'issues' && github.event.label.name == 's12y') ||
+       (github.event_name == 'pull_request' && github.event.label.name == 's12y'))
     steps:
       - name: Get content ID and check if already on board
         id: check

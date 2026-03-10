@@ -10,7 +10,7 @@ name: Sync project board status
 
 on:
   pull_request:
-    types: [review_requested, ready_for_review, submitted, closed]
+    types: [review_requested, ready_for_review, closed]
 
 jobs:
   set-in-review:
