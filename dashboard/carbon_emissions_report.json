@@ -1,82 +1,138 @@
 {
-  "title": "Carbon Emissions Report",
-  "timezone": "utc",
-  "editable": false,
-  "graphTooltip": 0,
-  "time": {
-    "from": "now-365d",
-    "to": "now"
-  },
+  "__inputs": [
+    {
+      "name": "bigquery_ds",
+      "label": "BigQuery Datasource",
+      "type": "datasource",
+      "pluginId": "grafana-bigquery-datasource",
+      "pluginName": "Google BigQuery"
+    },
+    {
+      "name": "athena_ds",
+      "label": "Athena Datasource",
+      "type": "datasource",
+      "pluginId": "grafana-athena-datasource",
+      "pluginName": "Amazon Athena"
+    },
+    {
+      "name": "infinity_ds",
+      "label": "Infinity Datasource",
+      "type": "datasource",
+      "pluginId": "yesoreyeram-infinity-datasource",
+      "pluginName": "Infinity"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "datasource",
+      "id": "grafana-athena-datasource",
+      "name": "Amazon Athena",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "grafana-bigquery-datasource",
+      "name": "Google BigQuery",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "yesoreyeram-infinity-datasource",
+      "name": "Infinity",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "geomap",
+      "name": "Geomap",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "piechart",
+      "name": "Pie chart",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    }
+  ],
+  "annotations": {},
+  "editable": true,
   "fiscalYearStartMonth": 0,
-  "schemaVersion": 41,
+  "graphTooltip": 0,
   "panels": [
     {
-      "type": "text",
-      "transparent": true,
       "gridPos": {
         "h": 3,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "repeatDirection": "h",
       "options": {
-        "mode": "markdown",
         "code": {
           "language": "plaintext",
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "\n# Carbon Emissions Report\n\nThis dashboard tracks carbon emissions across various sources of business activity. The data sources surface carbon emissions from Cloud Service Providers (GCP, AWS, Azure). [Learn more](https://github.com/grafana/sustainability-o11y).\n"
-      }
+        "content": "\n# Carbon Emissions Report\n\nThis dashboard tracks carbon emissions across various sources of business activity. The data sources surface carbon emissions from Cloud Service Providers (GCP, AWS, Azure). [Learn more](https://github.com/grafana/sustainability-o11y).\n",
+        "mode": "markdown"
+      },
+      "repeatDirection": "h",
+      "transparent": true,
+      "type": "text"
     },
     {
-      "type": "stat",
-      "targets": [
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
-          "editorMode": "code",
-          "refId": "GCP",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "AWS",
-          "rawSQL": "SELECT\n  SUM(total_lbm_emissions_value) AS total\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
-          "editorMode": "code",
-          "refId": "Azure",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "🌍 Total Carbon Emissions",
-      "transparent": true,
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -84,7 +140,64 @@
         "x": 0,
         "y": 3
       },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
+          "refId": "GCP"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  SUM(total_lbm_emissions_value) AS total\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n\n",
+          "refId": "AWS"
+        },
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "refId": "Azure"
+        }
+      ],
+      "title": "🌍 Total Carbon Emissions",
       "transformations": [
         {
           "id": "reduce",
@@ -95,188 +208,53 @@
           }
         }
       ],
-      "options": {
-        "graphMode": "none",
-        "colorMode": "value",
-        "justifyMode": "auto",
-        "textMode": "auto",
-        "wideLayout": true,
-        "showPercentChange": false,
-        "reduceOptions": {
-          "values": false,
-          "calcs": [
-            "sum"
-          ]
-        },
-        "percentChangeColorMode": "standard",
-        "orientation": "auto"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
-          },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "light-blue"
-          }
-        },
-        "overrides": []
-      }
+      "transparent": true,
+      "type": "stat"
     },
     {
-      "type": "barchart",
-      "targets": [
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as metric_tons_CO2eq,\n  usage_month,\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    usage_month\n  ORDER BY usage_month ASC\n  LIMIT 1000;\n",
-          "editorMode": "code",
-          "refId": "GCP",
-          "hide": false,
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "AWS",
-          "rawSQL": "SELECT\n  usage_period_start AS time,\n  ROUND(SUM(total_lbm_emissions_value), 4) AS metric_tons_CO2eq\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND total_mbm_emissions_value \u003e 0\nGROUP BY usage_period_start\nORDER BY usage_period_start;\n\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    usage_month,\n    SUM(emissions_kg_co2e) / 1000 AS metric_tons_CO2eq\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n",
-          "editorMode": "code",
-          "refId": "Azure",
-          "hide": false,
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Emissions by Source Over Time",
-      "transparent": true,
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
       },
-      "gridPos": {
-        "h": 12,
-        "w": 19,
-        "x": 5,
-        "y": 3
-      },
-      "repeatDirection": "h",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "renameByName": {
-              "usage_month": "created_month"
-            }
-          }
-        },
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "created_month"
-              },
-              {
-                "dateFormat": "YYYY-MM",
-                "destinationType": "time",
-                "targetField": "usage_month"
-              }
-            ]
-          }
-        }
-      ],
-      "options": {
-        "xField": "created_month",
-        "orientation": "auto",
-        "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 100,
-        "stacking": "normal",
-        "showValue": "never",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
-      },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              },
-              {
-                "value": 80,
-                "color": "red"
-              }
-            ]
-          },
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
-            "lineWidth": 1,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
             "scaleDistribution": {
               "type": "linear"
             },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
             "thresholdsStyle": {
               "mode": "off"
-            },
-            "axisBorderShow": false
-          }
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "MtCO₂e"
         },
         "overrides": [
           {
@@ -325,56 +303,134 @@
             ]
           }
         ]
-      }
-    },
-    {
-      "type": "stat",
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 19,
+        "x": 5,
+        "y": 3
+      },
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "created_month",
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
-          "editorMode": "code",
-          "refId": "GCP",
           "datasource": {
             "type": "grafana-bigquery-datasource",
             "uid": "${bigquery_ds}"
-          }
+          },
+          "editorMode": "code",
+          "format": 0,
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as metric_tons_CO2eq,\n  usage_month,\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    usage_month\n  ORDER BY usage_month ASC\n  LIMIT 1000;\n",
+          "refId": "GCP"
         },
         {
-          "format": 1,
           "connectionArgs": {
-            "region": "__default",
             "catalog": "__default",
             "database": "__default",
+            "region": "__default",
             "resultReuseEnabled": false,
             "resultReuseMaxAgeInMinutes": 60
           },
-          "refId": "AWS",
-          "rawSQL": "SELECT\n  SUM(total_lbm_emissions_value) AS total\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n\n",
           "datasource": {
             "type": "grafana-athena-datasource",
             "uid": "${athena_ds}"
-          }
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  usage_period_start AS time,\n  ROUND(SUM(total_lbm_emissions_value), 4) AS metric_tons_CO2eq\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND total_mbm_emissions_value \u003e 0\nGROUP BY usage_period_start\nORDER BY usage_period_start;\n\n",
+          "refId": "AWS"
         },
         {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
-          "editorMode": "code",
-          "refId": "Azure",
           "datasource": {
             "type": "grafana-bigquery-datasource",
             "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    usage_month,\n    SUM(emissions_kg_co2e) / 1000 AS metric_tons_CO2eq\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n",
+          "refId": "Azure"
+        }
+      ],
+      "title": "Emissions by Source Over Time",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "usage_month": "created_month"
+            }
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "created_month"
+              },
+              {
+                "dateFormat": "YYYY-MM",
+                "destinationType": "time",
+                "targetField": "usage_month"
+              }
+            ]
           }
         }
       ],
-      "title": "🚗 Equivalent Trips Around the World",
-      "description": "Equivalent trips around the world by an average gasoline-powered passenger vehicle, calculated using the EPA Greenhouse Gas Equivalencies Calculator (2,481 miles per metric ton CO₂e).",
       "transparent": true,
+      "type": "barchart"
+    },
+    {
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
+      },
+      "description": "Equivalent trips around the world by an average gasoline-powered passenger vehicle, calculated using the EPA Greenhouse Gas Equivalencies Calculator (2,481 miles per metric ton CO₂e).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "trips"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -382,7 +438,64 @@
         "x": 0,
         "y": 9
       },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n\n",
+          "refId": "GCP"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  SUM(total_lbm_emissions_value) AS total\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n\n",
+          "refId": "AWS"
+        },
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    SUM(emissions_kg_co2e) / 1000 AS total\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "refId": "Azure"
+        }
+      ],
+      "title": "🚗 Equivalent Trips Around the World",
       "transformations": [
         {
           "id": "reduce",
@@ -450,171 +563,68 @@
           }
         }
       ],
-      "options": {
-        "graphMode": "none",
-        "colorMode": "value",
-        "justifyMode": "auto",
-        "textMode": "auto",
-        "wideLayout": true,
-        "showPercentChange": false,
-        "reduceOptions": {
-          "values": false,
-          "calcs": [
-            "sum"
-          ]
-        },
-        "percentChangeColorMode": "standard",
-        "orientation": "auto"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "trips",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
-          },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "light-blue"
-          }
-        },
-        "overrides": []
-      }
+      "transparent": true,
+      "type": "stat"
     },
     {
-      "type": "text",
-      "transparent": true,
       "gridPos": {
         "h": 2,
         "w": 24,
         "x": 5,
         "y": 15
       },
-      "repeatDirection": "h",
       "options": {
-        "mode": "markdown",
         "code": {
           "language": "plaintext",
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "\nThis dashboard displays carbon emissions in [metric tons of carbon dioxide equivalent (MtCO₂e)](https://www.ipcc.ch/sr15/chapter/glossary), an industry-standard measurement for all greenhouse gases.\n"
-      }
+        "content": "\nThis dashboard displays carbon emissions in [metric tons of carbon dioxide equivalent (MtCO₂e)](https://www.ipcc.ch/sr15/chapter/glossary), an industry-standard measurement for all greenhouse gases.\n",
+        "mode": "markdown"
+      },
+      "repeatDirection": "h",
+      "transparent": true,
+      "type": "text"
     },
     {
-      "type": "text",
-      "transparent": true,
       "gridPos": {
         "h": 5,
         "w": 24,
         "x": 0,
         "y": 21
       },
-      "repeatDirection": "h",
       "options": {
-        "mode": "markdown",
         "code": {
           "language": "plaintext",
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "\n#### Carbon Emissions Breakdown\n\nCarbon emissions are tracked according to the [Greenhouse Gas Protocol](https://ghgprotocol.org/corporate-standard), the most widely used and recognised greenhouse gas accounting standard, which categorizes emissions into three scopes:\n- **Scope 1:** All direct emissions from owned or controlled sources.\n- **Scope 2:** Indirect emissions from purchased energy generation. For example, these can either use the [Location-Based Method or Market-Based Method](https://github.com/grafana/sustainability-o11y#location-based-method-lbm-vs-market-based-method-mbm).\n- **Scope 3:** All other indirect emissions in the value chain (upstream and downstream), including emissions from workloads running on CSPs and business travel.\n"
-      }
+        "content": "\n#### Carbon Emissions Breakdown\n\nCarbon emissions are tracked according to the [Greenhouse Gas Protocol](https://ghgprotocol.org/corporate-standard), the most widely used and recognised greenhouse gas accounting standard, which categorizes emissions into three scopes:\n- **Scope 1:** All direct emissions from owned or controlled sources.\n- **Scope 2:** Indirect emissions from purchased energy generation. For example, these can either use the [Location-Based Method or Market-Based Method](https://github.com/grafana/sustainability-o11y#location-based-method-lbm-vs-market-based-method-mbm).\n- **Scope 3:** All other indirect emissions in the value chain (upstream and downstream), including emissions from workloads running on CSPs and business travel.\n",
+        "mode": "markdown"
+      },
+      "repeatDirection": "h",
+      "transparent": true,
+      "type": "text"
     },
     {
-      "type": "piechart",
-      "targets": [
-        {
-          "panelId": 15,
-          "refId": "Scope 1",
-          "withTransforms": true,
-          "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
-          }
-        },
-        {
-          "panelId": 14,
-          "refId": "Scope 2",
-          "withTransforms": true,
-          "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
-          }
-        },
-        {
-          "panelId": 13,
-          "refId": "Scope 3",
-          "withTransforms": true,
-          "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
-          }
-        }
-      ],
-      "title": "Total Emissions by Scope",
-      "transparent": true,
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
       },
-      "gridPos": {
-        "h": 12,
-        "w": 6,
-        "x": 0,
-        "y": 26
-      },
-      "repeatDirection": "h",
-      "options": {
-        "pieType": "pie",
-        "displayLabels": [
-          "percent",
-          "name"
-        ],
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "reduceOptions": {
-          "values": false,
-          "calcs": [
-            "sum"
-          ]
-        },
-        "legend": {
-          "values": [
-            "percent",
-            "value"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Value",
-          "sortDesc": true,
-          "calcs": []
-        },
-        "orientation": ""
-      },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
           "color": {
-            "mode": "palette-classic",
-            "fixedColor": "text"
+            "fixedColor": "text",
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
-              "tooltip": false,
               "legend": false,
+              "tooltip": false,
               "viz": false
             }
-          }
+          },
+          "unit": "MtCO₂e"
         },
         "overrides": [
           {
@@ -654,56 +664,134 @@
             ]
           }
         ]
-      }
-    },
-    {
-      "type": "barchart",
-      "id": 13,
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 6,
+        "x": 0,
+        "y": 26
+      },
+      "options": {
+        "displayLabels": [
+          "percent",
+          "name"
+        ],
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Value",
+          "sortDesc": true,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "orientation": "",
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "values": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as scope3\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
-          "editorMode": "code",
-          "refId": "Scope 3 (GCP)",
           "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
-          "editorMode": "code",
-          "refId": "Azure Scope 3",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "refId": "AWS Scope 3",
-          "rawSQL": "SELECT\n  'AWS' as source,\n  SUM(total_scope_3_lbm_emissions_value) AS scope3\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n",
+          "panelId": 15,
+          "refId": "Scope 1",
+          "withTransforms": true
+        },
+        {
           "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 14,
+          "refId": "Scope 2",
+          "withTransforms": true
+        },
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 13,
+          "refId": "Scope 3",
+          "withTransforms": true
         }
       ],
-      "title": "Scope 3",
+      "title": "Total Emissions by Scope",
       "transparent": true,
+      "type": "piechart"
+    },
+    {
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "scope3"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Scope 3"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -711,7 +799,73 @@
         "x": 6,
         "y": 26
       },
+      "id": 13,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source",
+        "xTickLabelMaxLength": 100,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as scope3\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
+          "refId": "Scope 3 (GCP)"
+        },
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "refId": "Azure Scope 3"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  'AWS' as source,\n  SUM(total_scope_3_lbm_emissions_value) AS scope3\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n",
+          "refId": "AWS Scope 3"
+        }
+      ],
+      "title": "Scope 3",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -737,131 +891,70 @@
           "options": null
         }
       ],
-      "options": {
-        "xField": "source",
-        "orientation": "vertical",
-        "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 100,
-        "xTickLabelSpacing": 0,
-        "stacking": "none",
-        "showValue": "auto",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "max": 6000,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "light-blue"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
+          "unit": "MtCO₂e"
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "scope3"
+              "options": "scope2"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Scope 3"
+                "value": "Scope 2"
               }
             ]
           }
         ]
-      }
-    },
-    {
-      "type": "barchart",
-      "id": 14,
-      "targets": [
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as scope2\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
-          "editorMode": "code",
-          "refId": "Scope 2",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "AWS Scope 2",
-          "rawSQL": "SELECT\n  'AWS' as source,\n  SUM(total_scope_2_lbm_emissions_value) AS scope2\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
-          "editorMode": "code",
-          "refId": "Azure Scope 2",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Scope 2",
-      "transparent": true,
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
       },
       "gridPos": {
         "h": 12,
@@ -869,7 +962,73 @@
         "x": 12,
         "y": 26
       },
+      "id": 14,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source",
+        "xTickLabelMaxLength": 100,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as scope2\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
+          "refId": "Scope 2"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  'AWS' as source,\n  SUM(total_scope_2_lbm_emissions_value) AS scope2\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n",
+          "refId": "AWS Scope 2"
+        },
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "refId": "Azure Scope 2"
+        }
+      ],
+      "title": "Scope 2",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -895,136 +1054,66 @@
           "options": null
         }
       ],
-      "options": {
-        "xField": "source",
-        "orientation": "vertical",
-        "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 100,
-        "xTickLabelSpacing": 0,
-        "stacking": "none",
-        "showValue": "auto",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "max": 6000,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
-              },
-              {
-                "value": 80,
-                "color": "red"
+                "color": "green",
+                "value": 0
               }
             ]
           },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "light-blue"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
+          "unit": "MtCO₂e"
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "scope2"
+              "options": "scope1"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Scope 2"
+                "value": "Scope 1"
               }
             ]
           }
         ]
-      }
-    },
-    {
-      "type": "barchart",
-      "id": 15,
-      "targets": [
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as scope1\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
-          "editorMode": "code",
-          "refId": "Scope 1",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "AWS Scope 1",
-          "rawSQL": "SELECT\n  'AWS' as source,\n  SUM(total_scope_1_emissions_value) AS scope1\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
-          "editorMode": "code",
-          "refId": "Azure Scope 1",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Scope 1",
-      "transparent": true,
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
       },
       "gridPos": {
         "h": 12,
@@ -1032,7 +1121,73 @@
         "x": 18,
         "y": 26
       },
+      "id": 15,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source",
+        "xTickLabelMaxLength": 100,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    'GCP' as source,\n    SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as scope1\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY source;\n",
+          "refId": "Scope 1"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  'AWS' as source,\n  SUM(total_scope_1_emissions_value) AS scope1\nFROM \"AwsDataCatalog\".\"${athena_database}\".\"${athena_table}\"\nWHERE usage_period_start BETWEEN $__timeFrom() AND $__timeTo()\n  AND model_version = 'v3.0.0'\n",
+          "refId": "AWS Scope 1"
+        },
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 0,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    'Azure' AS source,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "refId": "Azure Scope 1"
+        }
+      ],
+      "title": "Scope 1",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -1058,88 +1213,11 @@
           "options": null
         }
       ],
-      "options": {
-        "xField": "source",
-        "orientation": "vertical",
-        "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 100,
-        "xTickLabelSpacing": 0,
-        "stacking": "none",
-        "showValue": "auto",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "max": 6000,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
-          },
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "light-blue"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "scope1"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Scope 1"
-              }
-            ]
-          }
-        ]
-      }
+      "transparent": true,
+      "type": "barchart"
     },
     {
-      "type": "row",
       "collapsed": false,
-      "title": "Google Cloud",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1147,52 +1225,31 @@
         "y": 38
       },
       "id": 0,
-      "panels": []
+      "panels": [],
+      "title": "Google Cloud",
+      "type": "row"
     },
     {
-      "type": "piechart",
-      "targets": [
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n\n",
-          "editorMode": "code",
-          "refId": "Scope 1",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
-          "editorMode": "code",
-          "refId": "Scope 2",
-          "hide": false,
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
-          "editorMode": "code",
-          "refId": "Scope 3",
-          "hide": false,
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Google Cloud | Total Emissions by Scope",
-      "transparent": true,
       "datasource": {
         "type": "grafana-bigquery-datasource",
         "uid": "${bigquery_ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "yellow",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 11,
@@ -1200,155 +1257,48 @@
         "x": 0,
         "y": 39
       },
-      "repeatDirection": "h",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "dateFormat": "YYYY-MM",
-                "destinationType": "time",
-                "targetField": "usage_month"
-              }
-            ]
-          }
-        }
-      ],
       "options": {
-        "pieType": "pie",
         "displayLabels": [
           "percent",
           "name",
           "value"
         ],
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "reduceOptions": {
-          "values": false,
-          "calcs": [
-            "sum"
-          ]
-        },
         "legend": {
-          "values": [],
+          "calcs": [],
           "displayMode": "hidden",
           "placement": "right",
           "showLegend": false,
-          "calcs": []
+          "values": []
         },
-        "orientation": ""
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "color": {
-            "mode": "palette-classic",
-            "fixedColor": "yellow"
-          },
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            }
-          }
+        "orientation": "",
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "values": false
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Scope 1 carbon_footprint"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Scope 1"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Scope 2 carbon_footprint"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Scope 2"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Scope 3 carbon_footprint"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Scope 3"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "type": "barchart",
-      "targets": [
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n\n",
-          "editorMode": "code",
-          "refId": "Scope 1",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
-          "editorMode": "code",
-          "refId": "Scope 2",
-          "hide": false,
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "format": 0,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 as carbon_footprint,\n    usage_month\n    FROM  `${gcp_dataset}.carbon_footprint`\n    WHERE $__timeFilter(TIMESTAMP(usage_month))\n    GROUP BY    usage_month\n    ORDER BY usage_month ASC;\n",
-          "editorMode": "code",
-          "refId": "Scope 3",
-          "hide": false,
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
         }
-      ],
-      "title": "Google Cloud | Emissions by Scope Over Time",
-      "transparent": true,
-      "datasource": {
-        "type": "grafana-bigquery-datasource",
-        "uid": "${bigquery_ds}"
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 12,
-        "x": 12,
-        "y": 39
       },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  usage_month,\n  SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 AS `Scope 1`,\n  SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 AS `Scope 2`,\n  SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 AS `Scope 3`\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month ASC;\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Google Cloud | Total Emissions by Scope",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -1363,91 +1313,158 @@
           }
         }
       ],
-      "options": {
-        "xField": "usage_month",
-        "orientation": "auto",
-        "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 100,
-        "stacking": "normal",
-        "showValue": "never",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "sortBy": "Name",
-          "sortDesc": false,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-bigquery-datasource",
+        "uid": "${bigquery_ds}"
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
-          },
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
-            "lineWidth": 0,
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
             "scaleDistribution": {
               "type": "linear"
             },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
             "thresholdsStyle": {
               "mode": "off"
-            },
-            "axisBorderShow": false
-          }
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "MtCO₂e"
         },
         "overrides": []
-      }
-    },
-    {
-      "type": "barchart",
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 39
+      },
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Name",
+          "sortDesc": false
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "usage_month",
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  --`location`.`location`,\n  --`location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  `service`.`description`,\n  --`service`.`id`\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    --location.region,\n    service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 10;\n",
-          "editorMode": "code",
-          "refId": "A",
           "datasource": {
             "type": "grafana-bigquery-datasource",
             "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  usage_month,\n  SUM(`carbon_footprint_kgCO2e`.`scope1`) / 1000 AS `Scope 1`,\n  SUM(`carbon_footprint_kgCO2e`.`scope2`.`location_based`) / 1000 AS `Scope 2`,\n  SUM(`carbon_footprint_kgCO2e`.`scope3`) / 1000 AS `Scope 3`\nFROM `${gcp_dataset}.carbon_footprint`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month ASC;\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Google Cloud | Emissions by Scope Over Time",
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "dateFormat": "YYYY-MM",
+                "destinationType": "time",
+                "targetField": "usage_month"
+              }
+            ]
           }
         }
       ],
-      "title": "Google Cloud | Emissions by GCP Service",
       "transparent": true,
+      "type": "barchart"
+    },
+    {
       "datasource": {
         "type": "grafana-bigquery-datasource",
         "uid": "${bigquery_ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 12,
@@ -1455,129 +1472,87 @@
         "x": 0,
         "y": 50
       },
-      "repeatDirection": "h",
       "options": {
-        "orientation": "horizontal",
         "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 0,
-        "stacking": "none",
-        "showValue": "auto",
         "barWidth": 0.97,
+        "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
           "calcs": [
             "sum"
-          ]
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
-          "sort": "none",
-          "hideZeros": false
+          "sort": "none"
         },
-        "fullHighlight": false
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
-          },
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
-        },
-        "overrides": []
-      }
-    },
-    {
-      "type": "geomap",
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  -- usage_month,\n  --`location`.`location`,\n  `location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  --`service`.`description`,\n  --`service`.`id`\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    location.region\n    --service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 15;\n",
-          "editorMode": "code",
-          "refId": "A",
           "datasource": {
             "type": "grafana-bigquery-datasource",
             "uid": "${bigquery_ds}"
-          }
-        },
-        {
-          "columns": [
-            {
-              "selector": "region",
-              "text": "region",
-              "type": "string"
-            },
-            {
-              "selector": "latitude",
-              "text": "latitude",
-              "type": "string"
-            },
-            {
-              "selector": "longitude",
-              "text": "longitude",
-              "type": "string"
-            }
-          ],
-          "data": "[\n  {\n    \"region\": \"af-south1\",\n    \"latitude\": -33.9249,\n    \"longitude\": 18.4241\n  },\n  {\n    \"region\": \"ap-northeast1\",\n    \"latitude\": 35.6895,\n    \"longitude\": 139.6917\n  },\n  {\n    \"region\": \"ap-northeast2\",\n    \"latitude\": 37.5665,\n    \"longitude\": 126.978\n  },\n  {\n    \"region\": \"ap-south1\",\n    \"latitude\": 19.076,\n    \"longitude\": 72.8777\n  },\n  {\n    \"region\": \"ap-south2\",\n    \"latitude\": 12.9716,\n    \"longitude\": 77.5946\n  },\n  {\n    \"region\": \"ap-southeast1\",\n    \"latitude\": 1.3521,\n    \"longitude\": 103.8198\n  },\n  {\n    \"region\": \"ap-southeast2\",\n    \"latitude\": -33.8688,\n    \"longitude\": 151.2093\n  },\n  {\n    \"region\": \"ap-southeast3\",\n    \"latitude\": -6.2088,\n    \"longitude\": 106.8456\n  },\n  {\n    \"region\": \"asia-south1\",\n    \"latitude\": 28.6139,\n    \"longitude\": 77.209\n  },\n  {\n    \"region\": \"asia-southeast1\",\n    \"latitude\": 13.7563,\n    \"longitude\": 100.5018\n  },\n  {\n    \"region\": \"australia-southeast1\",\n    \"latitude\": -37.8136,\n    \"longitude\": 144.9631\n  },\n  {\n    \"region\": \"ca-central1\",\n    \"latitude\": 45.4215,\n    \"longitude\": -75.6991\n  },\n  {\n    \"region\": \"ca-west1\",\n    \"latitude\": 49.2827,\n    \"longitude\": -123.1207\n  },\n  {\n    \"region\": \"centralus\",\n    \"latitude\": 41.5908,\n    \"longitude\": -93.6208\n  },\n  {\n    \"region\": \"eu-central1\",\n    \"latitude\": 50.1109,\n    \"longitude\": 8.6821\n  },\n  {\n    \"region\": \"eu-central2\",\n    \"latitude\": 47.3769,\n    \"longitude\": 8.5417\n  },\n  {\n    \"region\": \"eu-north1\",\n    \"latitude\": 59.3293,\n    \"longitude\": 18.0686\n  },\n  {\n    \"region\": \"eu-south2\",\n    \"latitude\": 41.9028,\n    \"longitude\": 12.4964\n  },\n  {\n    \"region\": \"eu-west2\",\n    \"latitude\": 51.5074,\n    \"longitude\": -0.1278\n  },\n  {\n    \"region\": \"eu-west3\",\n    \"latitude\": 48.8566,\n    \"longitude\": 2.3522\n  },\n  {\n    \"region\": \"europe-west1\",\n    \"latitude\": 52.3667,\n    \"longitude\": 4.8945\n  },\n  {\n    \"region\": \"europe-west2\",\n    \"latitude\": 53.483,\n    \"longitude\": -2.241\n  },\n  {\n    \"region\": \"me-central1\",\n    \"latitude\": 25.277,\n    \"longitude\": 55.2962\n  },\n  {\n    \"region\": \"me-central2\",\n    \"latitude\": 24.7136,\n    \"longitude\": 46.6753\n  },\n  {\n    \"region\": \"sa-east1\",\n    \"latitude\": -23.5505,\n    \"longitude\": -46.6333\n  },\n  {\n    \"region\": \"southamerica-east1\",\n    \"latitude\": -23.5338,\n    \"longitude\": -46.6253\n  },\n  {\n    \"region\": \"us-central1\",\n    \"latitude\": 41.2619,\n    \"longitude\": -95.8608\n  },\n  {\n    \"region\": \"us-east1\",\n    \"latitude\": 33.196,\n    \"longitude\": -80.0131\n  },\n  {\n    \"region\": \"us-east2\",\n    \"latitude\": 40.4173,\n    \"longitude\": -82.9071\n  },\n  {\n    \"region\": \"us-east4\",\n    \"latitude\": 33.749,\n    \"longitude\": -84.388\n  },\n  {\n    \"region\": \"us-west1\",\n    \"latitude\": 36.7783,\n    \"longitude\": -119.4179\n  },\n  {\n    \"region\": \"us-west2\",\n    \"latitude\": 45.5051,\n    \"longitude\": -122.675\n  },\n  {\n    \"region\": \"westeurope\",\n    \"latitude\": 52.3676,\n    \"longitude\": 4.9041\n  },\n{ \"region\": \"us-west3\", \"latitude\": 40.7608, \"longitude\": -111.8910 },  \n{ \"region\": \"europe-west4\", \"latitude\": 53.4386, \"longitude\": 6.8355 },  \n{ \"region\": \"us-west4\", \"latitude\": 36.1699, \"longitude\": -115.1398 }  \n]",
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${infinity_ds}"
           },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "hide": false,
-          "parser": "backend",
-          "refId": "B",
-          "root_selector": "",
-          "source": "inline",
-          "type": "json",
-          "url": "",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  --`location`.`location`,\n  --`location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  `service`.`description`,\n  --`service`.`id`\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    --location.region,\n    service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 10;\n",
+          "refId": "A"
         }
       ],
-      "title": "Google Cloud | Emissions by GCP Region",
+      "title": "Google Cloud | Emissions by GCP Service",
       "transparent": true,
+      "type": "barchart"
+    },
+    {
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-blue",
+            "mode": "fixed"
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "total_carbon_footprint"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -1585,45 +1560,26 @@
         "x": 12,
         "y": 50
       },
-      "repeatDirection": "h",
-      "transformations": [
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "region",
-            "mode": "outerTabular"
-          }
-        }
-      ],
       "options": {
-        "view": {
-          "id": "zero",
-          "lat": 0,
-          "lon": 0,
-          "zoom": 1,
-          "allLayers": true
-        },
-        "controls": {
-          "showZoom": true,
-          "mouseWheelZoom": true,
-          "showAttribution": true,
-          "showScale": false,
-          "showDebug": false,
-          "showMeasure": false
-        },
         "basemap": {
-          "type": "osm-standard",
-          "name": "Layer 0",
           "config": {
             "server": "streets",
             "showLabels": true,
             "theme": "auto"
-          }
+          },
+          "name": "Layer 0",
+          "type": "osm-standard"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showMeasure": false,
+          "showScale": false,
+          "showZoom": true
         },
         "layers": [
           {
-            "type": "markers",
-            "name": "MtCO₂e",
             "config": {
               "showLegend": false,
               "style": {
@@ -1668,52 +1624,89 @@
             "location": {
               "mode": "auto"
             },
-            "tooltip": true
+            "name": "MtCO₂e",
+            "tooltip": true,
+            "type": "markers"
           }
         ],
         "tooltip": {
           "mode": "details"
+        },
+        "view": {
+          "allLayers": true,
+          "id": "zero",
+          "lat": 0,
+          "lon": 0,
+          "zoom": 1
         }
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "color": {
-            "mode": "fixed",
-            "fixedColor": "dark-blue"
-          }
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(`carbon_footprint_total_kgCO2e`.`location_based`) / 1000 as total_carbon_footprint,\n  -- usage_month,\n  --`location`.`location`,\n  `location`.`region`,\n  --`project`.`id`,\n  --`project`.`number`,\n  --`service`.`description`,\n  --`service`.`id`\nFROM\n  `${gcp_dataset}.carbon_footprint`\n  WHERE $__timeFilter(TIMESTAMP(usage_month))\n  GROUP BY\n    -- usage_month,\n    location.region\n    --service.description\n  ORDER BY total_carbon_footprint DESC\n  LIMIT 15;\n",
+          "refId": "A"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "total_carbon_footprint"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
+        {
+          "columns": [
+            {
+              "selector": "region",
+              "text": "region",
+              "type": "string"
             },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": true,
-                  "viz": true
-                }
-              }
-            ]
+            {
+              "selector": "latitude",
+              "text": "latitude",
+              "type": "string"
+            },
+            {
+              "selector": "longitude",
+              "text": "longitude",
+              "type": "string"
+            }
+          ],
+          "data": "[\n  {\n    \"region\": \"af-south1\",\n    \"latitude\": -33.9249,\n    \"longitude\": 18.4241\n  },\n  {\n    \"region\": \"ap-northeast1\",\n    \"latitude\": 35.6895,\n    \"longitude\": 139.6917\n  },\n  {\n    \"region\": \"ap-northeast2\",\n    \"latitude\": 37.5665,\n    \"longitude\": 126.978\n  },\n  {\n    \"region\": \"ap-south1\",\n    \"latitude\": 19.076,\n    \"longitude\": 72.8777\n  },\n  {\n    \"region\": \"ap-south2\",\n    \"latitude\": 12.9716,\n    \"longitude\": 77.5946\n  },\n  {\n    \"region\": \"ap-southeast1\",\n    \"latitude\": 1.3521,\n    \"longitude\": 103.8198\n  },\n  {\n    \"region\": \"ap-southeast2\",\n    \"latitude\": -33.8688,\n    \"longitude\": 151.2093\n  },\n  {\n    \"region\": \"ap-southeast3\",\n    \"latitude\": -6.2088,\n    \"longitude\": 106.8456\n  },\n  {\n    \"region\": \"asia-south1\",\n    \"latitude\": 28.6139,\n    \"longitude\": 77.209\n  },\n  {\n    \"region\": \"asia-southeast1\",\n    \"latitude\": 13.7563,\n    \"longitude\": 100.5018\n  },\n  {\n    \"region\": \"australia-southeast1\",\n    \"latitude\": -37.8136,\n    \"longitude\": 144.9631\n  },\n  {\n    \"region\": \"ca-central1\",\n    \"latitude\": 45.4215,\n    \"longitude\": -75.6991\n  },\n  {\n    \"region\": \"ca-west1\",\n    \"latitude\": 49.2827,\n    \"longitude\": -123.1207\n  },\n  {\n    \"region\": \"centralus\",\n    \"latitude\": 41.5908,\n    \"longitude\": -93.6208\n  },\n  {\n    \"region\": \"eu-central1\",\n    \"latitude\": 50.1109,\n    \"longitude\": 8.6821\n  },\n  {\n    \"region\": \"eu-central2\",\n    \"latitude\": 47.3769,\n    \"longitude\": 8.5417\n  },\n  {\n    \"region\": \"eu-north1\",\n    \"latitude\": 59.3293,\n    \"longitude\": 18.0686\n  },\n  {\n    \"region\": \"eu-south2\",\n    \"latitude\": 41.9028,\n    \"longitude\": 12.4964\n  },\n  {\n    \"region\": \"eu-west2\",\n    \"latitude\": 51.5074,\n    \"longitude\": -0.1278\n  },\n  {\n    \"region\": \"eu-west3\",\n    \"latitude\": 48.8566,\n    \"longitude\": 2.3522\n  },\n  {\n    \"region\": \"europe-west1\",\n    \"latitude\": 52.3667,\n    \"longitude\": 4.8945\n  },\n  {\n    \"region\": \"europe-west2\",\n    \"latitude\": 53.483,\n    \"longitude\": -2.241\n  },\n  {\n    \"region\": \"me-central1\",\n    \"latitude\": 25.277,\n    \"longitude\": 55.2962\n  },\n  {\n    \"region\": \"me-central2\",\n    \"latitude\": 24.7136,\n    \"longitude\": 46.6753\n  },\n  {\n    \"region\": \"sa-east1\",\n    \"latitude\": -23.5505,\n    \"longitude\": -46.6333\n  },\n  {\n    \"region\": \"southamerica-east1\",\n    \"latitude\": -23.5338,\n    \"longitude\": -46.6253\n  },\n  {\n    \"region\": \"us-central1\",\n    \"latitude\": 41.2619,\n    \"longitude\": -95.8608\n  },\n  {\n    \"region\": \"us-east1\",\n    \"latitude\": 33.196,\n    \"longitude\": -80.0131\n  },\n  {\n    \"region\": \"us-east2\",\n    \"latitude\": 40.4173,\n    \"longitude\": -82.9071\n  },\n  {\n    \"region\": \"us-east4\",\n    \"latitude\": 33.749,\n    \"longitude\": -84.388\n  },\n  {\n    \"region\": \"us-west1\",\n    \"latitude\": 36.7783,\n    \"longitude\": -119.4179\n  },\n  {\n    \"region\": \"us-west2\",\n    \"latitude\": 45.5051,\n    \"longitude\": -122.675\n  },\n  {\n    \"region\": \"westeurope\",\n    \"latitude\": 52.3676,\n    \"longitude\": 4.9041\n  },\n{ \"region\": \"us-west3\", \"latitude\": 40.7608, \"longitude\": -111.8910 },  \n{ \"region\": \"europe-west4\", \"latitude\": 53.4386, \"longitude\": 6.8355 },  \n{ \"region\": \"us-west4\", \"latitude\": 36.1699, \"longitude\": -115.1398 }  \n]",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${infinity_ds}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "parser": "backend",
+          "refId": "B",
+          "root_selector": "",
+          "source": "inline",
+          "type": "json",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
           }
-        ]
-      }
+        }
+      ],
+      "title": "Google Cloud | Emissions by GCP Region",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "region",
+            "mode": "outerTabular"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "geomap"
     },
     {
-      "type": "row",
       "collapsed": false,
-      "title": "AWS",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1721,34 +1714,32 @@
         "y": 62
       },
       "id": 0,
-      "panels": []
+      "panels": [],
+      "title": "AWS",
+      "type": "row"
     },
     {
-      "type": "piechart",
-      "targets": [
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "A",
-          "rawSQL": "SELECT\n  SUM(total_scope_1_emissions_value) AS \"Scope 1\",\n  SUM(total_scope_2_lbm_emissions_value) AS \"Scope 2\",\n  SUM(total_scope_3_lbm_emissions_value) AS \"Scope 3\"\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start);\n\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        }
-      ],
-      "title": "AWS | Total Emissions by Scope (Location-Based)",
-      "description": "This pie chart shows the proportion of location-based (LBM) carbon emissions contributed by Scope 1, Scope 2 LBM, and Scope 3 LBM for the selected time range.",
-      "transparent": true,
       "datasource": {
         "type": "grafana-athena-datasource",
         "uid": "${athena_ds}"
+      },
+      "description": "This pie chart shows the proportion of location-based (LBM) carbon emissions contributed by Scope 1, Scope 2 LBM, and Scope 3 LBM for the selected time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 11,
@@ -1756,75 +1747,99 @@
         "x": 0,
         "y": 63
       },
-      "repeatDirection": "h",
       "options": {
-        "pieType": "pie",
         "displayLabels": [
           "value"
         ],
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "reduceOptions": {
-          "values": false,
-          "calcs": []
-        },
         "legend": {
-          "values": [
-            "percent"
-          ],
+          "calcs": [],
           "displayMode": "list",
           "placement": "right",
           "showLegend": true,
-          "calcs": []
+          "values": [
+            "percent"
+          ]
         },
-        "orientation": ""
+        "orientation": "",
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [],
+          "values": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "color": {
-            "mode": "palette-classic",
-            "fixedColor": "super-light-blue"
-          },
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            }
-          }
-        },
-        "overrides": []
-      }
-    },
-    {
-      "type": "barchart",
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 1,
           "connectionArgs": {
-            "region": "__default",
             "catalog": "__default",
             "database": "__default",
+            "region": "__default",
             "resultReuseEnabled": false,
             "resultReuseMaxAgeInMinutes": 60
           },
-          "refId": "A",
-          "rawSQL": "SELECT\n  DATE_TRUNC('month', usage_period_start) AS time,\n  location AS metric,\n  SUM(total_scope_1_emissions_value + total_scope_2_lbm_emissions_value + total_scope_3_lbm_emissions_value) AS value\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY\n  DATE_TRUNC('month', usage_period_start),\n  location\nORDER BY time, location\n",
           "datasource": {
             "type": "grafana-athena-datasource",
             "uid": "${athena_ds}"
-          }
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  SUM(total_scope_1_emissions_value) AS \"Scope 1\",\n  SUM(total_scope_2_lbm_emissions_value) AS \"Scope 2\",\n  SUM(total_scope_3_lbm_emissions_value) AS \"Scope 3\"\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start);\n\n",
+          "refId": "A"
         }
       ],
-      "title": "AWS | Carbon Emissions by Region",
+      "title": "AWS | Total Emissions by Scope (Location-Based)",
       "transparent": true,
+      "type": "piechart"
+    },
+    {
       "datasource": {
         "type": "grafana-athena-datasource",
         "uid": "${athena_ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 11,
@@ -1832,7 +1847,50 @@
         "x": 12,
         "y": 63
       },
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "showValue": "never",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "time",
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  DATE_TRUNC('month', usage_period_start) AS time,\n  location AS metric,\n  SUM(total_scope_1_emissions_value + total_scope_2_lbm_emissions_value + total_scope_3_lbm_emissions_value) AS value\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY\n  DATE_TRUNC('month', usage_period_start),\n  location\nORDER BY time, location\n",
+          "refId": "A"
+        }
+      ],
+      "title": "AWS | Carbon Emissions by Region",
       "transformations": [
         {
           "id": "prepareTimeSeries",
@@ -1848,98 +1906,55 @@
           }
         }
       ],
-      "options": {
-        "xField": "time",
-        "orientation": "vertical",
-        "barRadius": 0.1,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 0,
-        "stacking": "normal",
-        "showValue": "never",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-athena-datasource",
+        "uid": "${athena_ds}"
       },
+      "description": "Displays monthly CO₂e emissions from AWS, broken down by Scope 1, Scope 2 LBM, and Scope 3 LBM.",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
+                "color": "green",
+                "value": 0
               },
               {
-                "value": 80,
-                "color": "red"
+                "color": "red",
+                "value": 80
               }
             ]
-          },
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
           }
         },
         "overrides": []
-      }
-    },
-    {
-      "type": "barchart",
-      "targets": [
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "A",
-          "rawSQL": "SELECT\n  DATE_TRUNC('month', usage_period_start) AS time,\n  SUM(total_scope_1_emissions_value) AS \"Scope 1\",\n  SUM(total_scope_2_lbm_emissions_value) AS \"Scope 2\",\n  SUM(total_scope_3_lbm_emissions_value) AS \"Scope 3\"\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY DATE_TRUNC('month', usage_period_start)\nORDER BY time;\n\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        }
-      ],
-      "title": "AWS | Monthly Carbon Emissions by Scope",
-      "description": "Displays monthly CO₂e emissions from AWS, broken down by Scope 1, Scope 2 LBM, and Scope 3 LBM.",
-      "transparent": true,
-      "datasource": {
-        "type": "grafana-athena-datasource",
-        "uid": "${athena_ds}"
       },
       "gridPos": {
         "h": 12,
@@ -1947,131 +1962,72 @@
         "x": 0,
         "y": 74
       },
-      "repeatDirection": "h",
       "options": {
-        "orientation": "auto",
         "barRadius": 0.1,
-        "xTickLabelRotation": -15,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 0,
-        "stacking": "normal",
-        "showValue": "never",
         "barWidth": 0.74,
+        "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
+          "calcs": [],
           "displayMode": "list",
           "placement": "right",
-          "showLegend": true,
-          "calcs": []
+          "showLegend": true
         },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "normal",
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
-          "sort": "none",
-          "hideZeros": false
+          "sort": "none"
         },
-        "fullHighlight": false
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": -15,
+        "xTickLabelSpacing": 0
       },
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              },
-              {
-                "value": 80,
-                "color": "red"
-              }
-            ]
-          },
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
-        },
-        "overrides": []
-      }
-    },
-    {
-      "type": "table",
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 1,
           "connectionArgs": {
-            "region": "__default",
             "catalog": "__default",
             "database": "__default",
+            "region": "__default",
             "resultReuseEnabled": false,
             "resultReuseMaxAgeInMinutes": 60
           },
-          "refId": "A",
-          "rawSQL": "SELECT\n  location AS region,\n  SUM(total_scope_1_emissions_value) AS scope1,\n  SUM(total_scope_2_lbm_emissions_value) AS scope2,\n  SUM(total_scope_3_lbm_emissions_value) AS scope3\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n\n",
           "datasource": {
             "type": "grafana-athena-datasource",
             "uid": "${athena_ds}"
-          }
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  DATE_TRUNC('month', usage_period_start) AS time,\n  SUM(total_scope_1_emissions_value) AS \"Scope 1\",\n  SUM(total_scope_2_lbm_emissions_value) AS \"Scope 2\",\n  SUM(total_scope_3_lbm_emissions_value) AS \"Scope 3\"\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY DATE_TRUNC('month', usage_period_start)\nORDER BY time;\n\n",
+          "refId": "A"
         }
       ],
-      "title": "AWS | Carbon Emissions per AWS region (LBM Methods)",
+      "title": "AWS | Monthly Carbon Emissions by Scope",
       "transparent": true,
+      "type": "barchart"
+    },
+    {
       "datasource": {
         "type": "grafana-athena-datasource",
         "uid": "${athena_ds}"
       },
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 12,
-        "y": 74
-      },
-      "repeatDirection": "h",
-      "options": {
-        "frameIndex": 0,
-        "showHeader": true,
-        "showTypeIcons": false,
-        "footer": {
-          "show": false,
-          "reducer": null,
-          "countRows": false
-        },
-        "cellHeight": "sm"
-      },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
+                "color": "green",
+                "value": 0
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "unit": "MtCO₂e"
         },
         "overrides": [
           {
@@ -2103,34 +2059,93 @@
             ]
           }
         ]
-      }
-    },
-    {
-      "type": "barchart",
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 74
+      },
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "reducer": null,
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "showTypeIcons": false
+      },
+      "repeatDirection": "h",
       "targets": [
         {
-          "format": 1,
           "connectionArgs": {
-            "region": "__default",
             "catalog": "__default",
             "database": "__default",
+            "region": "__default",
             "resultReuseEnabled": false,
             "resultReuseMaxAgeInMinutes": 60
           },
-          "refId": "A",
-          "rawSQL": "SELECT\n  DATE_TRUNC('month', usage_period_start) AS time,\n  SUM(total_mbm_emissions_value) AS \"Market-Based\",\n  SUM(total_lbm_emissions_value) AS \"Location-Based\"\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY DATE_TRUNC('month', usage_period_start)\nORDER BY time;\n",
           "datasource": {
             "type": "grafana-athena-datasource",
             "uid": "${athena_ds}"
-          }
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  location AS region,\n  SUM(total_scope_1_emissions_value) AS scope1,\n  SUM(total_scope_2_lbm_emissions_value) AS scope2,\n  SUM(total_scope_3_lbm_emissions_value) AS scope3\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n\n",
+          "refId": "A"
         }
       ],
-      "title": "AWS | Carbon Emissions Over Time (Market- vs Location-Based)",
-      "description": "This visualization shows monthly carbon emissions, comparing market-based (MB) and location-based (LB) totals over time.",
+      "title": "AWS | Carbon Emissions per AWS region (LBM Methods)",
       "transparent": true,
+      "type": "table"
+    },
+    {
       "datasource": {
         "type": "grafana-athena-datasource",
         "uid": "${athena_ds}"
+      },
+      "description": "This visualization shows monthly carbon emissions, comparing market-based (MB) and location-based (LB) totals over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 12,
@@ -2138,136 +2153,75 @@
         "x": 0,
         "y": 86
       },
-      "repeatDirection": "h",
       "options": {
-        "xField": "time",
-        "orientation": "auto",
         "barRadius": 0.25,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 0,
-        "stacking": "none",
-        "showValue": "never",
         "barWidth": 0.9,
+        "fullHighlight": false,
         "groupWidth": 0.7,
         "legend": {
+          "calcs": [],
           "displayMode": "list",
           "placement": "right",
-          "showLegend": true,
-          "calcs": []
+          "showLegend": true
         },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "none",
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
-          "sort": "none",
-          "hideZeros": false
+          "sort": "none"
         },
-        "fullHighlight": false
+        "xField": "time",
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
+          },
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n  DATE_TRUNC('month', usage_period_start) AS time,\n  SUM(total_mbm_emissions_value) AS \"Market-Based\",\n  SUM(total_lbm_emissions_value) AS \"Location-Based\"\nFROM ${athena_database}.${athena_table}\nWHERE model_version = 'v3.0.0'\n  AND $__timeFilter(usage_period_start)\nGROUP BY DATE_TRUNC('month', usage_period_start)\nORDER BY time;\n",
+          "refId": "A"
+        }
+      ],
+      "title": "AWS | Carbon Emissions Over Time (Market- vs Location-Based)",
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic-by-name"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
-              },
-              {
-                "value": 80,
-                "color": "red"
+                "color": "green",
+                "value": 0
               }
             ]
           },
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
+          "unit": "MtCO₂e"
         },
         "overrides": []
-      }
-    },
-    {
-      "type": "geomap",
-      "targets": [
-        {
-          "format": 1,
-          "connectionArgs": {
-            "region": "__default",
-            "catalog": "__default",
-            "database": "__default",
-            "resultReuseEnabled": false,
-            "resultReuseMaxAgeInMinutes": 60
-          },
-          "refId": "A",
-          "rawSQL": "SELECT\n    region_code AS region,\n    SUM(total_lbm_emissions_value) AS total_carbon_footprint\nFROM ${athena_database}.${athena_table}\nWHERE usage_period_start \u003e= CAST($__timeFrom() AS timestamp)\n  AND usage_period_start \u003c= CAST($__timeTo() AS timestamp)\n  AND total_lbm_emissions_value \u003e 0\nGROUP BY region_code\n",
-          "datasource": {
-            "type": "grafana-athena-datasource",
-            "uid": "${athena_ds}"
-          }
-        },
-        {
-          "columns": [
-            {
-              "selector": "region",
-              "text": "region",
-              "type": "string"
-            },
-            {
-              "selector": "latitude",
-              "text": "latitude",
-              "type": "string"
-            },
-            {
-              "selector": "longitude",
-              "text": "longitude",
-              "type": "string"
-            }
-          ],
-          "data": "[\n  { \"region\": \"af-south-1\", \"latitude\": -33.9249, \"longitude\": 18.4241 },\n  { \"region\": \"ap-east-1\", \"latitude\": 22.3964, \"longitude\": 114.1095 },\n  { \"region\": \"ap-northeast-1\", \"latitude\": 35.6895, \"longitude\": 139.6917 },\n  { \"region\": \"ap-northeast-2\", \"latitude\": 37.5665, \"longitude\": 126.978 },\n  { \"region\": \"ap-northeast-3\", \"latitude\": 34.6937, \"longitude\": 135.5023 },\n  { \"region\": \"ap-south-1\", \"latitude\": 19.076, \"longitude\": 72.8777 },\n  { \"region\": \"ap-south-2\", \"latitude\": 13.0827, \"longitude\": 80.2707 },\n  { \"region\": \"ap-southeast-1\", \"latitude\": 1.3521, \"longitude\": 103.8198 },\n  { \"region\": \"ap-southeast-2\", \"latitude\": -33.8688, \"longitude\": 151.2093 },\n  { \"region\": \"ap-southeast-3\", \"latitude\": -6.2088, \"longitude\": 106.8456 },\n  { \"region\": \"ca-central-1\", \"latitude\": 45.4215, \"longitude\": -75.6972 },\n  { \"region\": \"ca-west-1\", \"latitude\": 49.246292, \"longitude\": -123.116226 },\n  { \"region\": \"eu-central-1\", \"latitude\": 50.1109, \"longitude\": 8.6821 },\n  { \"region\": \"eu-central-2\", \"latitude\": 47.3769, \"longitude\": 8.5417 },\n  { \"region\": \"eu-west-1\", \"latitude\": 53.3498, \"longitude\": -6.2603 },\n  { \"region\": \"eu-west-2\", \"latitude\": 51.5074, \"longitude\": -0.1278 },\n  { \"region\": \"eu-west-3\", \"latitude\": 48.8566, \"longitude\": 2.3522 },\n  { \"region\": \"eu-north-1\", \"latitude\": 59.3293, \"longitude\": 18.0686 },\n  { \"region\": \"me-south-1\", \"latitude\": 26.0667, \"longitude\": 50.5577 },\n  { \"region\": \"sa-east-1\", \"latitude\": -23.5505, \"longitude\": -46.6333 },\n  { \"region\": \"us-east-1\", \"latitude\": 39.0438, \"longitude\": -77.4874 },\n  { \"region\": \"us-east-2\", \"latitude\": 40.4173, \"longitude\": -82.9071 },\n  { \"region\": \"us-west-1\", \"latitude\": 37.7749, \"longitude\": -122.4194 },\n  { \"region\": \"us-west-2\", \"latitude\": 45.5234, \"longitude\": -122.6762 }\n]",
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${infinity_ds}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "hide": false,
-          "parser": "backend",
-          "refId": "B",
-          "root_selector": "",
-          "source": "inline",
-          "type": "json",
-          "url": "",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        }
-      ],
-      "title": "AWS | Emissions by AWS Region",
-      "transparent": true,
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
       },
       "gridPos": {
         "h": 12,
@@ -2275,45 +2229,26 @@
         "x": 12,
         "y": 86
       },
-      "repeatDirection": "h",
-      "transformations": [
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "region",
-            "mode": "outerTabular"
-          }
-        }
-      ],
       "options": {
-        "view": {
-          "id": "zero",
-          "lat": 0,
-          "lon": 0,
-          "zoom": 1,
-          "allLayers": true
-        },
-        "controls": {
-          "showZoom": true,
-          "mouseWheelZoom": true,
-          "showAttribution": true,
-          "showScale": false,
-          "showDebug": false,
-          "showMeasure": false
-        },
         "basemap": {
-          "type": "osm-standard",
-          "name": "Layer 0",
           "config": {
             "server": "streets",
             "showLabels": true,
             "theme": "auto"
-          }
+          },
+          "name": "Layer 0",
+          "type": "osm-standard"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showMeasure": false,
+          "showScale": false,
+          "showZoom": true
         },
         "layers": [
           {
-            "type": "markers",
-            "name": "",
             "config": {
               "showLegend": false,
               "style": {
@@ -2357,36 +2292,94 @@
             "location": {
               "mode": "auto"
             },
-            "tooltip": true
+            "name": "",
+            "tooltip": true,
+            "type": "markers"
           }
         ],
         "tooltip": {
           "mode": "details"
+        },
+        "view": {
+          "allLayers": true,
+          "id": "zero",
+          "lat": 0,
+          "lon": 0,
+          "zoom": 1
         }
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default",
+            "resultReuseEnabled": false,
+            "resultReuseMaxAgeInMinutes": 60
           },
-          "color": {
-            "mode": "palette-classic-by-name"
-          }
+          "datasource": {
+            "type": "grafana-athena-datasource",
+            "uid": "${athena_ds}"
+          },
+          "format": 1,
+          "rawSQL": "SELECT\n    region_code AS region,\n    SUM(total_lbm_emissions_value) AS total_carbon_footprint\nFROM ${athena_database}.${athena_table}\nWHERE usage_period_start \u003e= CAST($__timeFrom() AS timestamp)\n  AND usage_period_start \u003c= CAST($__timeTo() AS timestamp)\n  AND total_lbm_emissions_value \u003e 0\nGROUP BY region_code\n",
+          "refId": "A"
         },
-        "overrides": []
-      }
+        {
+          "columns": [
+            {
+              "selector": "region",
+              "text": "region",
+              "type": "string"
+            },
+            {
+              "selector": "latitude",
+              "text": "latitude",
+              "type": "string"
+            },
+            {
+              "selector": "longitude",
+              "text": "longitude",
+              "type": "string"
+            }
+          ],
+          "data": "[\n  { \"region\": \"af-south-1\", \"latitude\": -33.9249, \"longitude\": 18.4241 },\n  { \"region\": \"ap-east-1\", \"latitude\": 22.3964, \"longitude\": 114.1095 },\n  { \"region\": \"ap-northeast-1\", \"latitude\": 35.6895, \"longitude\": 139.6917 },\n  { \"region\": \"ap-northeast-2\", \"latitude\": 37.5665, \"longitude\": 126.978 },\n  { \"region\": \"ap-northeast-3\", \"latitude\": 34.6937, \"longitude\": 135.5023 },\n  { \"region\": \"ap-south-1\", \"latitude\": 19.076, \"longitude\": 72.8777 },\n  { \"region\": \"ap-south-2\", \"latitude\": 13.0827, \"longitude\": 80.2707 },\n  { \"region\": \"ap-southeast-1\", \"latitude\": 1.3521, \"longitude\": 103.8198 },\n  { \"region\": \"ap-southeast-2\", \"latitude\": -33.8688, \"longitude\": 151.2093 },\n  { \"region\": \"ap-southeast-3\", \"latitude\": -6.2088, \"longitude\": 106.8456 },\n  { \"region\": \"ca-central-1\", \"latitude\": 45.4215, \"longitude\": -75.6972 },\n  { \"region\": \"ca-west-1\", \"latitude\": 49.246292, \"longitude\": -123.116226 },\n  { \"region\": \"eu-central-1\", \"latitude\": 50.1109, \"longitude\": 8.6821 },\n  { \"region\": \"eu-central-2\", \"latitude\": 47.3769, \"longitude\": 8.5417 },\n  { \"region\": \"eu-west-1\", \"latitude\": 53.3498, \"longitude\": -6.2603 },\n  { \"region\": \"eu-west-2\", \"latitude\": 51.5074, \"longitude\": -0.1278 },\n  { \"region\": \"eu-west-3\", \"latitude\": 48.8566, \"longitude\": 2.3522 },\n  { \"region\": \"eu-north-1\", \"latitude\": 59.3293, \"longitude\": 18.0686 },\n  { \"region\": \"me-south-1\", \"latitude\": 26.0667, \"longitude\": 50.5577 },\n  { \"region\": \"sa-east-1\", \"latitude\": -23.5505, \"longitude\": -46.6333 },\n  { \"region\": \"us-east-1\", \"latitude\": 39.0438, \"longitude\": -77.4874 },\n  { \"region\": \"us-east-2\", \"latitude\": 40.4173, \"longitude\": -82.9071 },\n  { \"region\": \"us-west-1\", \"latitude\": 37.7749, \"longitude\": -122.4194 },\n  { \"region\": \"us-west-2\", \"latitude\": 45.5234, \"longitude\": -122.6762 }\n]",
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${infinity_ds}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "parser": "backend",
+          "refId": "B",
+          "root_selector": "",
+          "source": "inline",
+          "type": "json",
+          "url": "",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "AWS | Emissions by AWS Region",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "region",
+            "mode": "outerTabular"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "geomap"
     },
     {
-      "type": "row",
       "collapsed": false,
-      "title": "Azure",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2394,28 +2387,31 @@
         "y": 98
       },
       "id": 0,
-      "panels": []
+      "panels": [],
+      "title": "Azure",
+      "type": "row"
     },
     {
-      "type": "piechart",
-      "targets": [
-        {
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
-          "editorMode": "code",
-          "refId": "Prod",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Azure | Total Emissions by Scope",
-      "transparent": true,
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "unit": "MtCO₂e"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 11,
@@ -2423,7 +2419,51 @@
         "x": 0,
         "y": 99
       },
+      "options": {
+        "displayLabels": [
+          "percent",
+          "name",
+          "value"
+        ],
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Value",
+          "sortDesc": false,
+          "values": [
+            "percent",
+            "value"
+          ]
+        },
+        "orientation": "",
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": [],
+          "values": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month));\n",
+          "refId": "Prod"
+        }
+      ],
+      "title": "Azure | Total Emissions by Scope",
       "transformations": [
         {
           "id": "merge",
@@ -2455,75 +2495,55 @@
           }
         }
       ],
-      "options": {
-        "pieType": "pie",
-        "displayLabels": [
-          "percent",
-          "name",
-          "value"
-        ],
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "reduceOptions": {
-          "values": false,
-          "calcs": []
-        },
-        "legend": {
-          "values": [
-            "percent",
-            "value"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "sortBy": "Value",
-          "sortDesc": false,
-          "calcs": []
-        },
-        "orientation": ""
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "color": {
-            "mode": "palette-classic",
-            "fixedColor": "blue"
-          },
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            }
-          }
-        },
-        "overrides": []
-      }
+      "transparent": true,
+      "type": "piechart"
     },
     {
-      "type": "barchart",
-      "targets": [
-        {
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "SELECT\n    usage_month AS time,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n\n",
-          "editorMode": "code",
-          "refId": "Prod",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Azure | Monthly CO₂ Emissions by Scope",
-      "description": "Displays monthly CO₂ emissions from Azure, broken down by Scope 1, Scope 2, and Scope 3.",
-      "transparent": true,
       "datasource": {
         "type": "datasource",
         "uid": "-- Mixed --"
+      },
+      "description": "Displays monthly CO₂ emissions from Azure, broken down by Scope 1, Scope 2, and Scope 3.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 11,
@@ -2531,7 +2551,45 @@
         "x": 12,
         "y": 99
       },
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.74,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "auto",
+        "showValue": "never",
+        "stacking": "normal",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "time",
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n    usage_month AS time,\n    SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 1`,\n    SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 2`,\n    SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS `Scope 3`\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\nGROUP BY usage_month\nORDER BY usage_month;\n\n",
+          "refId": "Prod"
+        }
+      ],
+      "title": "Azure | Monthly CO₂ Emissions by Scope",
       "transformations": [
         {
           "id": "merge",
@@ -2579,92 +2637,60 @@
           }
         }
       ],
-      "options": {
-        "xField": "time",
-        "orientation": "auto",
-        "barRadius": 0.1,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 0,
-        "stacking": "normal",
-        "showValue": "never",
-        "barWidth": 0.74,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true,
-          "calcs": []
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
+      "transparent": true,
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
-              },
-              {
-                "value": 80,
-                "color": "red"
+                "color": "green",
+                "value": 0
               }
             ]
           },
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
+          "unit": "MtCO₂e"
         },
-        "overrides": []
-      }
-    },
-    {
-      "type": "table",
-      "targets": [
-        {
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  location AS region,\n  SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1,\n  SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2,\n  SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND location IS NOT NULL\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n",
-          "editorMode": "code",
-          "refId": "Prod",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "scope1"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-BlPu"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "scope2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-viridis"
+                }
+              }
+            ]
           }
-        }
-      ],
-      "title": "Azure | Carbon Emissions by Azure region",
-      "transparent": true,
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -2672,7 +2698,32 @@
         "x": 0,
         "y": 110
       },
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "reducer": null,
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true,
+        "showTypeIcons": false
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  location AS region,\n  SUM(CASE WHEN scope = 'Scope 1' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope1,\n  SUM(CASE WHEN scope = 'Scope 2' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope2,\n  SUM(CASE WHEN scope = 'Scope 3' THEN emissions_kg_co2e ELSE 0 END) / 1000 AS scope3\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND location IS NOT NULL\nGROUP BY location\nORDER BY (scope1 + scope2 + scope3) DESC\n",
+          "refId": "Prod"
+        }
+      ],
+      "title": "Azure | Carbon Emissions by Azure region",
       "transformations": [
         {
           "id": "merge",
@@ -2708,85 +2759,51 @@
           }
         }
       ],
-      "options": {
-        "frameIndex": 0,
-        "showHeader": true,
-        "showTypeIcons": false,
-        "footer": {
-          "show": false,
-          "reducer": null,
-          "countRows": false
-        },
-        "cellHeight": "sm"
+      "transparent": true,
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "MtCO₂e",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "value": 0,
-                "color": "green"
+                "color": "green",
+                "value": 0
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "unit": "MtCO₂e"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "scope1"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "continuous-BlPu"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "scope2"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "continuous-viridis"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "type": "barchart",
-      "targets": [
-        {
-          "format": 1,
-          "rawQuery": true,
-          "rawSql": "SELECT\n  SUM(emissions_kg_co2e) / 1000 AS total_carbon_footprint,\n  resource_type\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND resource_type IS NOT NULL\nGROUP BY resource_type\nORDER BY total_carbon_footprint DESC\nLIMIT 10\n",
-          "editorMode": "code",
-          "refId": "Prod",
-          "datasource": {
-            "type": "grafana-bigquery-datasource",
-            "uid": "${bigquery_ds}"
-          }
-        }
-      ],
-      "title": "Azure | Emissions by Resource Type",
-      "transparent": true,
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
+        "overrides": []
       },
       "gridPos": {
         "h": 12,
@@ -2794,7 +2811,46 @@
         "x": 12,
         "y": 110
       },
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelMaxLength": 0,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
       "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-bigquery-datasource",
+            "uid": "${bigquery_ds}"
+          },
+          "editorMode": "code",
+          "format": 1,
+          "rawQuery": true,
+          "rawSql": "SELECT\n  SUM(emissions_kg_co2e) / 1000 AS total_carbon_footprint,\n  resource_type\nFROM `${azure_dataset}.azure_carbon_data_prod`\nWHERE $__timeFilter(TIMESTAMP(usage_month))\n  AND resource_type IS NOT NULL\nGROUP BY resource_type\nORDER BY total_carbon_footprint DESC\nLIMIT 10\n",
+          "refId": "Prod"
+        }
+      ],
+      "title": "Azure | Emissions by Resource Type",
       "transformations": [
         {
           "id": "merge",
@@ -2818,165 +2874,58 @@
           }
         }
       ],
-      "options": {
-        "orientation": "horizontal",
-        "barRadius": 0,
-        "xTickLabelRotation": 0,
-        "xTickLabelMaxLength": 0,
-        "xTickLabelSpacing": 0,
-        "stacking": "none",
-        "showValue": "auto",
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "calcs": [
-            "sum"
-          ]
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none",
-          "hideZeros": false
-        },
-        "fullHighlight": false
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "MtCO₂e",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "value": 0,
-                "color": "green"
-              }
-            ]
-          },
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "lineWidth": 1,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "axisPlacement": "auto",
-            "axisColorMode": "text",
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "axisCenteredZero": false,
-            "hideFrom": {
-              "tooltip": false,
-              "legend": false,
-              "viz": false
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            },
-            "axisBorderShow": false
-          }
-        },
-        "overrides": []
-      }
+      "transparent": true,
+      "type": "barchart"
     }
   ],
+  "schemaVersion": 41,
   "templating": {
     "list": [
       {
-        "type": "textbox",
-        "name": "gcp_dataset",
-        "label": "GCP BigQuery Dataset",
-        "skipUrlSync": false,
-        "query": "",
-        "multi": false,
         "allowCustomValue": true,
-        "includeAll": false,
         "auto": false,
+        "auto_count": 30,
         "auto_min": "10s",
-        "auto_count": 30
-      },
-      {
-        "type": "textbox",
-        "name": "azure_dataset",
-        "label": "Azure BigQuery Dataset",
-        "skipUrlSync": false,
-        "query": "",
-        "multi": false,
-        "allowCustomValue": true,
         "includeAll": false,
-        "auto": false,
-        "auto_min": "10s",
-        "auto_count": 30
-      },
-      {
-        "type": "textbox",
-        "name": "athena_database",
-        "label": "Athena Database",
-        "skipUrlSync": false,
-        "query": "",
-        "multi": false,
-        "allowCustomValue": true,
-        "includeAll": false,
-        "auto": false,
-        "auto_min": "10s",
-        "auto_count": 30
-      },
-      {
-        "type": "textbox",
-        "name": "athena_table",
-        "label": "Athena Table",
-        "skipUrlSync": false,
-        "query": "",
-        "multi": false,
-        "allowCustomValue": true,
-        "includeAll": false,
-        "auto": false,
-        "auto_min": "10s",
-        "auto_count": 30
-      },
-      {
-        "type": "datasource",
-        "name": "bigquery_ds",
         "label": "BigQuery Datasource",
-        "skipUrlSync": false,
+        "multi": false,
+        "name": "bigquery_ds",
         "query": "grafana-bigquery-datasource",
-        "multi": false,
-        "allowCustomValue": true,
-        "includeAll": false,
-        "auto": false,
-        "auto_min": "10s",
-        "auto_count": 30
+        "skipUrlSync": false,
+        "type": "datasource"
       },
       {
-        "type": "datasource",
-        "name": "athena_ds",
+        "allowCustomValue": true,
+        "auto": false,
+        "auto_count": 30,
+        "auto_min": "10s",
+        "includeAll": false,
         "label": "Athena Datasource",
-        "skipUrlSync": false,
-        "query": "grafana-athena-datasource",
         "multi": false,
-        "allowCustomValue": true,
-        "includeAll": false,
-        "auto": false,
-        "auto_min": "10s",
-        "auto_count": 30
+        "name": "athena_ds",
+        "query": "grafana-athena-datasource",
+        "skipUrlSync": false,
+        "type": "datasource"
       },
       {
-        "type": "datasource",
-        "name": "infinity_ds",
-        "label": "Infinity Datasource",
-        "skipUrlSync": false,
-        "query": "yesoreyeram-infinity-datasource",
-        "multi": false,
         "allowCustomValue": true,
-        "includeAll": false,
         "auto": false,
+        "auto_count": 30,
         "auto_min": "10s",
-        "auto_count": 30
+        "includeAll": false,
+        "label": "Infinity Datasource",
+        "multi": false,
+        "name": "infinity_ds",
+        "query": "yesoreyeram-infinity-datasource",
+        "skipUrlSync": false,
+        "type": "datasource"
       }
     ]
   },
-  "annotations": {}
+  "time": {
+    "from": "now-365d",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Carbon Emissions Report"
 }
