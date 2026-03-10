@@ -23,8 +23,10 @@ jobs:
         id: check
         env:
           GH_TOKEN: ${{ secrets.PROJECT_BOARD_TOKEN || secrets.GITHUB_TOKEN }}
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+          PR_NODE_ID: ${{ github.event.pull_request.node_id }}
         run: |
-          CONTENT_ID="${{ github.event.issue.node_id || github.event.pull_request.node_id }}"
+          CONTENT_ID="${ISSUE_NODE_ID:-$PR_NODE_ID}"
           echo "content_id=$CONTENT_ID" >> $GITHUB_OUTPUT
 
           # Check if this issue/PR is already on project 1063
