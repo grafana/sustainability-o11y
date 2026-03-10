@@ -85,4 +85,4 @@ metric_tons_CO2eq = kgCO2e / 1000
 
 ## License
 
-This project is licensed under the GNU Affero General Public License v3.0 — see [LICENSE](LICENSE) for the full text.
+This project is licensed under the Apache License 2.0 — see [LICENSE](LICENSE) for the full text.
