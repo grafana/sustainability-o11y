@@ -82,3 +82,7 @@ Carbon data is surfaced in kilograms of CO₂e (kgCO2e) from some data sources. 
 ```
 metric_tons_CO2eq = kgCO2e / 1000
 ```
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 — see [LICENSE](LICENSE) for the full text.
