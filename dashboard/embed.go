@@ -4,71 +4,48 @@ import (
 	_ "embed"
 )
 
-// Total / aggregate queries
-
-//go:embed queries/total/scope1_query.sql
-var scope1Query string
-
-//go:embed queries/total/scope2_query.sql
-var scope2Query string
-
-//go:embed queries/total/scope3_query.sql
-var scope3Query string
-
-//go:embed queries/total/gcp_total.sql
-var gcpTotalQuery string
-
-//go:embed queries/total/gcp_monthly_region_query.sql
-var gcpMonthlyRegionQuery string
-
-//go:embed queries/total/aws_total.sql
-var awsTotalQuery string
-
-//go:embed queries/total/aws_monthly_total.sql
-var awsMonthlyTotalQuery string
-
-//go:embed queries/total/aws_scope1_total.sql
-var awsScope1TotalQuery string
-
-//go:embed queries/total/aws_scope2_total.sql
-var awsScope2TotalQuery string
-
-//go:embed queries/total/aws_scope3_total.sql
-var awsScope3TotalQuery string
-
-//go:embed queries/total/azure_total.sql
-var azureTotalQuery string
-
-//go:embed queries/total/azure_monthly_total.sql
-var azureMonthlyTotalQuery string
-
-//go:embed queries/total/azure_scope1_total.sql
-var azureScope1TotalQuery string
-
-//go:embed queries/total/azure_scope2_total.sql
-var azureScope2TotalQuery string
-
-//go:embed queries/total/azure_scope3_total.sql
-var azureScope3TotalQuery string
-
 // GCP queries
 
-//go:embed queries/gcp/gcp_carbon_region_query.sql
-var gcpCarbonRegionQuery string
+//go:embed queries/gcp/gcp_scope1_total.sql
+var gcpScope1TotalQuery string
 
-//go:embed queries/gcp/gcp_carbon_service_query.sql
-var gcpCarbonServiceQuery string
+//go:embed queries/gcp/gcp_scope2_total.sql
+var gcpScope2TotalQuery string
 
-//go:embed queries/gcp/scope1_query_with_usage.sql
-var scope1QueryWithUsage string
+//go:embed queries/gcp/gcp_scope3_total.sql
+var gcpScope3TotalQuery string
 
-//go:embed queries/gcp/scope2_query_with_usage.sql
-var scope2QueryWithUsage string
+//go:embed queries/gcp/gcp_total.sql
+var gcpTotalQuery string
 
-//go:embed queries/gcp/scope3_query_with_usage.sql
-var scope3QueryWithUsage string
+//go:embed queries/gcp/gcp_monthly_total.sql
+var gcpMonthlyTotalQuery string
+
+//go:embed queries/gcp/gcp_region_table.sql
+var gcpRegionTableQuery string
+
+//go:embed queries/gcp/gcp_service_table.sql
+var gcpServiceTableQuery string
+
+//go:embed queries/gcp/gcp_monthly_scope_emissions.sql
+var gcpMonthlyScopeEmissionsQuery string
 
 // AWS queries
+
+//go:embed queries/aws/aws_total.sql
+var awsTotalQuery string
+
+//go:embed queries/aws/aws_monthly_total.sql
+var awsMonthlyTotalQuery string
+
+//go:embed queries/aws/aws_scope1_total.sql
+var awsScope1TotalQuery string
+
+//go:embed queries/aws/aws_scope2_total.sql
+var awsScope2TotalQuery string
+
+//go:embed queries/aws/aws_scope3_total.sql
+var awsScope3TotalQuery string
 
 //go:embed queries/aws/aws_scope_emissions.sql
 var awsScopeEmissionsQuery string
@@ -92,6 +69,21 @@ var awsGeomapQuery string
 
 //go:embed queries/azure/azure_scope_emissions.sql
 var azureScopeEmissionsQuery string
+
+//go:embed queries/azure/azure_total.sql
+var azureTotalQuery string
+
+//go:embed queries/azure/azure_scope1_total.sql
+var azureScope1TotalQuery string
+
+//go:embed queries/azure/azure_scope2_total.sql
+var azureScope2TotalQuery string
+
+//go:embed queries/azure/azure_scope3_total.sql
+var azureScope3TotalQuery string
+
+//go:embed queries/azure/azure_monthly_total.sql
+var azureMonthlyTotalQuery string
 
 //go:embed queries/azure/azure_monthly_scope_emissions.sql
 var azureMonthlyScopeEmissionsQuery string
