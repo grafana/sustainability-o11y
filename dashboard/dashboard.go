@@ -155,7 +155,7 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 		WithPanel(barchart.NewPanelBuilder().
 			Id(14).
 			Datasource(mixedDSRef).
-			WithTarget(bigqueryRaw(gcpScope2TotalQuery).
+			WithTarget(bigqueryRaw(scope2Query).
 				Format(0).
 				RefId("Scope 2").
 				Datasource(bigQueryDSRef)).
@@ -224,7 +224,7 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			Datasource(mixedDSRef).
 			Height(12).
 			Span(6).
-			WithTarget(bigqueryRaw(gcpScope1TotalQuery).
+			WithTarget(bigqueryRaw(scope1Query).
 				Format(0).
 				RefId("Scope 1").
 				Datasource(bigQueryDSRef)).
@@ -290,10 +290,24 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			Title("Google Cloud")).
 		WithPanel(piechart.NewPanelBuilder().
 			Datasource(bigQueryDSRef).
-			WithTarget(bigqueryRaw(gcpMonthlyScopeEmissionsQuery).
-				Format(1).
+			WithTarget(bigqueryRaw(scope1QueryWithUsage).
+				Format(0).
 				EditorMode("code").
-				RefId("A").
+				RefId("Scope 1").
+				Datasource(bigQueryDSRef),
+			).
+			WithTarget(bigqueryRaw(scope2QueryWithUsage).
+				Format(0).
+				EditorMode("code").
+				RefId("Scope 2").
+				Hide(false).
+				Datasource(bigQueryDSRef),
+			).
+			WithTarget(bigqueryRaw(scope3QueryWithUsage).
+				Format(0).
+				EditorMode("code").
+				RefId("Scope 3").
+				Hide(false).
 				Datasource(bigQueryDSRef),
 			).
 			Title("Google Cloud | Total Emissions by Scope").
@@ -304,6 +318,9 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			ColorScheme(dashboard.NewFieldColorBuilder().
 				Mode("palette-classic").
 				FixedColor("yellow")).
+			WithOverride(dashboard.MatcherConfig{Id: "byName", Options: "Scope 1 carbon_footprint"}, []dashboard.DynamicConfigValue{{Id: "displayName", Value: "Scope 1"}}).
+			WithOverride(dashboard.MatcherConfig{Id: "byName", Options: "Scope 2 carbon_footprint"}, []dashboard.DynamicConfigValue{{Id: "displayName", Value: "Scope 2"}}).
+			WithOverride(dashboard.MatcherConfig{Id: "byName", Options: "Scope 3 carbon_footprint"}, []dashboard.DynamicConfigValue{{Id: "displayName", Value: "Scope 3"}}).
 			PieType("pie").
 			DisplayLabels([]piechart.PieChartLabels{"percent", "name", "value"}).
 			Tooltip(common.NewVizTooltipOptionsBuilder().
@@ -324,10 +341,24 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 				Viz(false))).
 		WithPanel(barchart.NewPanelBuilder().
 			Datasource(bigQueryDSRef).
-			WithTarget(bigqueryRaw(gcpMonthlyScopeEmissionsQuery).
-				Format(1).
+			WithTarget(bigqueryRaw(scope1QueryWithUsage).
+				Format(0).
 				EditorMode("code").
-				RefId("A").
+				RefId("Scope 1").
+				Datasource(bigQueryDSRef),
+			).
+			WithTarget(bigqueryRaw(scope2QueryWithUsage).
+				Format(0).
+				EditorMode("code").
+				RefId("Scope 2").
+				Hide(false).
+				Datasource(bigQueryDSRef),
+			).
+			WithTarget(bigqueryRaw(scope3QueryWithUsage).
+				Format(0).
+				EditorMode("code").
+				RefId("Scope 3").
+				Hide(false).
 				Datasource(bigQueryDSRef),
 			).
 			Title("Google Cloud | Emissions by Scope Over Time").
@@ -372,7 +403,7 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			AxisBorderShow(false)).
 		WithPanel(barchart.NewPanelBuilder().
 			Datasource(bigQueryDSRef).
-			WithTarget(bigqueryRaw(gcpServiceTableQuery).
+			WithTarget(bigqueryRaw(gcpCarbonServiceQuery).
 				Format(1).
 				EditorMode("code").
 				RefId("A").
@@ -415,7 +446,7 @@ Carbon emissions are tracked according to the [Greenhouse Gas Protocol](https://
 			AxisBorderShow(false)).
 		WithPanel(geomap.NewPanelBuilder().
 			Datasource(mixedDSRef).
-			WithTarget(bigqueryRaw(gcpRegionTableQuery).
+			WithTarget(bigqueryRaw(gcpCarbonRegionQuery).
 				Format(1).
 				EditorMode("code").
 				RefId("A").
@@ -935,7 +966,7 @@ func buildTotalCarbonPanel() *stat.PanelBuilder {
 func buildEmissionsBySourcePanel() *barchart.PanelBuilder {
 	return barchart.NewPanelBuilder().
 		Datasource(mixedDSRef).
-		WithTarget(bigqueryRaw(gcpMonthlyTotalQuery).
+		WithTarget(bigqueryRaw(gcpMonthlyRegionQuery).
 			RefId("GCP").
 			Hide(false).
 			Datasource(bigQueryDSRef),
@@ -1050,7 +1081,7 @@ func buildScope3Panel() *barchart.PanelBuilder {
 	return barchart.NewPanelBuilder().
 		Id(13).
 		Datasource(mixedDSRef).
-		WithTarget(bigqueryRaw(gcpScope3TotalQuery).
+		WithTarget(bigqueryRaw(scope3Query).
 			Format(0).
 			RefId("Scope 3 (GCP)").
 			Datasource(bigQueryDSRef)).
