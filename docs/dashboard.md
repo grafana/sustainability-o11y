@@ -4,6 +4,7 @@
 
 The Carbon Emissions Report dashboard visualises cloud carbon emissions across GCP, AWS, and Azure in a single view. It shows total emissions, breakdowns by scope, region, and service, and supports both location-based and market-based methodology comparisons.
 
+The dashboard will soon be published to the [Grafana community dashboard library](https://grafana.com/grafana/dashboards/). In the meantime, follow the steps below to ensure your data pipelines and Grafana instance are ready to use it once available.
 
 ## Required plugins
 
