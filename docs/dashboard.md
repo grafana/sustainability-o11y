@@ -4,7 +4,7 @@
 
 The Carbon Emissions Report dashboard visualises cloud carbon emissions across GCP, AWS, and Azure in a single view. It shows total emissions, breakdowns by scope, region, and service, and supports both location-based and market-based methodology comparisons.
 
-The dashboard is built with the [Grafana Foundation SDK](https://github.com/grafana/grafana-foundation-sdk) and all data source connections and table names are configured via template variables — no code changes are needed to point it at your own data.
+The dashboard will soon be published to the [Grafana community dashboard library](https://grafana.com/grafana/dashboards/). In the meantime, follow the steps below to ensure your data pipelines and Grafana instance are ready to use it once available.
 
 ## Required plugins
 
@@ -59,14 +59,3 @@ Queries use the default project configured in your BigQuery data source connecti
 | `athena_table` | The table name within the Athena database | `v3_0_0_data` |
 
 The database name matches the `glue_database_name` variable in the [AWS Terraform module](aws-pipeline.md) (defaults to `carbon`). The table name is the one created by the Glue crawler — by default this is derived from the S3 prefix and is typically `v3_0_0_data` for the AWS Carbon Footprint Tool v3 schema.
-
-## Generating the dashboard JSON
-
-The dashboard is defined as code using the Grafana Foundation SDK. To generate the JSON for import:
-
-```bash
-cd dashboard
-go run ./export
-```
-
-This outputs `carbon_emissions_report.json` in the `dashboard/` directory, which can be imported in Grafana.
