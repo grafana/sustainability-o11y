@@ -41,6 +41,7 @@ jobs:
           context: azure-carbon-exporter
           file: azure-carbon-exporter/Dockerfile
           outputs: "type=image,push-by-digest=true,name-canonical=true,push=true"
+          dockerhub-repository: grafana/azure-carbon-exporter
           push: true
           tags: |
             type=raw,value=latest

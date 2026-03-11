@@ -2,6 +2,10 @@
 
 This repo houses everything related to sustainability observability at Grafana: data pipelines, dashboards, and documentation for collecting and visualizing cloud carbon emissions across the Cloud Service Providers AWS, GCP, and Azure.
 
+## Dashboard
+
+The Carbon Emissions Report dashboard visualises emissions from GCP, AWS, and Azure in one view. See [docs/dashboard.md](docs/dashboard.md) for setup instructions, required plugins, and how to configure the template variables.
+
 ## Data Pipelines
 
 ### AWS
@@ -19,6 +23,9 @@ See [docs/gcp-pipeline.md](docs/gcp-pipeline.md).
 Exporter that fetches Azure carbon emissions data from the Carbon Optimization API and writes it to BigQuery for Grafana to consume.
 
 See [docs/azure-pipeline.md](docs/azure-pipeline.md).
+
+## Project Maturity
+This project is in active development and subject to change. Grafana Labs builds and maintains this project as part of our commitment to sustainability and the open source community, but it is provided without support.
 
 ## Carbon Concepts
 
@@ -75,3 +82,7 @@ Carbon data is surfaced in kilograms of CO₂e (kgCO2e) from some data sources. 
 ```
 metric_tons_CO2eq = kgCO2e / 1000
 ```
+
+## License
+
+This project is licensed under the Apache License 2.0 — see [LICENSE](LICENSE) for the full text.
