@@ -56,3 +56,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "enable_request_metrics" {
+  description = "Enable CloudWatch request metrics for the S3 bucket."
+  type        = bool
+  default     = true
+}
