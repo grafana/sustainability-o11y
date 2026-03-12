@@ -78,6 +78,10 @@ jobs:
       id-token: write
       pull-requests: write
     steps:
+      - name: Set short SHA
+        id: sha
+        run: echo "short_sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
       - name: Trigger Argo Workflow
         uses: grafana/shared-workflows/actions/trigger-argo-workflow@438c8d6321147607b3f6f0e922508e78e746af9b # trigger-argo-workflow/v0.3.1
         with:
@@ -85,6 +89,6 @@ jobs:
           workflow_template: azure-carbon-exporter
           parameters: |
             imageName=grafana/azure-carbon-exporter
-            dockertag=main-${{ github.sha }}
+            dockertag=main-${{ steps.sha.outputs.short_sha }}
             prCommentContext= Triggered by ${{ github.sha }} in grafana/sustainability-o11y
             commit_author=grafana-delivery-bot
