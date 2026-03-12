@@ -68,8 +68,8 @@ func NewBigQueryExporter(ctx context.Context, config BigQueryConfig) (*BigQueryE
 	var err error
 
 	if config.CredentialsFile != "" {
-		// Use specified credentials file
-		client, err = bigquery.NewClient(ctx, config.ProjectID, option.WithCredentialsFile(config.CredentialsFile))
+		// Use specified credentials file (ServiceAccount type for security validation)
+		client, err = bigquery.NewClient(ctx, config.ProjectID, option.WithAuthCredentialsFile(option.ServiceAccount, config.CredentialsFile))
 	} else {
 		// Use Application Default Credentials
 		slog.Info("No credentials file specified, using Application Default Credentials")
@@ -94,7 +94,9 @@ func NewBigQueryExporter(ctx context.Context, config BigQueryConfig) (*BigQueryE
 	// Create table if needed (dataset should already exist via Terraform)
 	if config.CreateTable {
 		if err := exporter.createTableIfNeeded(ctx); err != nil {
-			client.Close()
+			if closeErr := client.Close(); closeErr != nil {
+				slog.Error("Failed to close BigQuery client during cleanup", "error", closeErr)
+			}
 			return nil, fmt.Errorf("failed to create table (ensure dataset exists via Terraform): %w", err)
 		}
 	}
