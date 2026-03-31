@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/azure-carbon-exporter"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
