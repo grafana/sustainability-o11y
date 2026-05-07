@@ -83,7 +83,7 @@ jobs:
         run: echo "short_sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
       - name: Trigger Argo Workflow
-        uses: grafana/shared-workflows/actions/trigger-argo-workflow@438c8d6321147607b3f6f0e922508e78e746af9b # trigger-argo-workflow/v0.3.1
+        uses: grafana/shared-workflows/actions/trigger-argo-workflow@8269e9362f30c5458c2cad54510ea74fd053920c # trigger-argo-workflow/v1.3.0
         with:
           namespace: platform-monitoring-cd
           workflow_template: azure-carbon-exporter
