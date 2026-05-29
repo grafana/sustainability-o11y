@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sustainability-o11y
+  title: sustainability-o11y
+  description: Monitor cloud carbon emissions & other environmental sustainability data, all in one place
+  annotations:
+    github.com/project-slug: grafana/sustainability-o11y
+spec:
+  type: service
+  owner: group:default/platform-monitoring
+  lifecycle: experimental
