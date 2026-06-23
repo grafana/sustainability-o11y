@@ -39,7 +39,7 @@ jobs:
           registries: gar
           gar-environment: prod
           gar-image: azure-carbon-exporter
-          gar-repository: dockerhub-azure-carbon-exporter-prod-mirror
+          gar-repository: dockerhub-sustainability-o11y-prod-mirror
           platforms: ${{ matrix.platform }}
           context: azure-carbon-exporter
           file: azure-carbon-exporter/Dockerfile
