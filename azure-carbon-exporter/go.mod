@@ -38,7 +38,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
-	github.com/pierrec/lz4/v4 v4.1.18 // indirect
+	github.com/pierrec/lz4/v4 v4.1.29 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/prometheus/client_model v0.4.1-0.20230718164431-9a2bf3000d16 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
