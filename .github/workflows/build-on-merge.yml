@@ -36,12 +36,14 @@ jobs:
         id: build
         uses: grafana/shared-workflows/actions/docker-build-push-image@438c8d6321147607b3f6f0e922508e78e746af9b # docker-build-push-image/v0.3.1
         with:
-          registries: dockerhub
+          registries: gar
+          gar-environment: prod
+          gar-image: azure-carbon-exporter
+          gar-repository: dockerhub-sustainability-o11y-prod-mirror
           platforms: ${{ matrix.platform }}
           context: azure-carbon-exporter
           file: azure-carbon-exporter/Dockerfile
           outputs: "type=image,push-by-digest=true,name-canonical=true,push=true"
-          dockerhub-repository: grafana/azure-carbon-exporter
           push: true
           tags: |
             type=raw,value=latest
@@ -64,6 +66,7 @@ jobs:
       - name: Push Multi-Arch Manifest
         uses: grafana/shared-workflows/actions/docker-import-digests-push-manifest@438c8d6321147607b3f6f0e922508e78e746af9b # docker-import-digests-push-manifest/v0.3.1
         with:
+          gar-environment: prod
           images: ${{ needs.build-and-export-digest.outputs.images }}
           push: true
           tags: |
