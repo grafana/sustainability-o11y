@@ -1,0 +1,36 @@
+name: Tests (azure-carbon-exporter)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "azure-carbon-exporter/**"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "azure-carbon-exporter/**"
+
+jobs:
+  build-lint-test:
+    permissions:
+      pull-requests: read
+      contents: read
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: azure-carbon-exporter
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-goversion
+      - name: Build
+        run: go build -v ./...
+      - name: Lint
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.14.0
+          working-directory: azure-carbon-exporter
+      - name: Test
+        run: go test -v ./...

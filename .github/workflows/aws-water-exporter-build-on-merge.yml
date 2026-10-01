@@ -1,15 +1,21 @@
-name: Build and Push on Merge
+name: Build and Push on Merge (aws-water-exporter)
 
 on:
   push:
     branches:
       - main
     paths:
-      - "azure-carbon-exporter/**"
+      - "aws-water-exporter/**"
 
 permissions:
   contents: read
 
+# No `deploy` job yet: unlike azure-carbon-exporter, there's no Argo
+# WorkflowTemplate named aws-water-exporter in deployment_tools to trigger
+# (the CronJob/Terraform side of this is still being built). This workflow
+# only builds and pushes the image, which is what deployment_tools' CD
+# pipeline needs to exist before that wiring can reference a real tag. Add
+# a `deploy` job mirroring build-on-merge.yml's once that template exists.
 jobs:
   build-and-export-digest:
     permissions:
@@ -38,11 +44,11 @@ jobs:
         with:
           registries: gar
           gar-environment: prod
-          gar-image: azure-carbon-exporter
+          gar-image: aws-water-exporter
           gar-repository: dockerhub-sustainability-o11y-prod-mirror
           platforms: ${{ matrix.platform }}
-          context: azure-carbon-exporter
-          file: azure-carbon-exporter/Dockerfile
+          context: aws-water-exporter
+          file: aws-water-exporter/Dockerfile
           outputs: "type=image,push-by-digest=true,name-canonical=true,push=true"
           push: true
           tags: |
@@ -72,26 +78,3 @@ jobs:
           tags: |
             type=raw,value=latest
             type=sha,prefix=main-,format=short
-
-  deploy:
-    needs: push-manifest
-    runs-on: ubuntu-26.04
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    steps:
-      - name: Set short SHA
-        id: sha
-        run: echo "short_sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-
-      - name: Trigger Argo Workflow
-        uses: grafana/shared-workflows/actions/trigger-argo-workflow@5a212d56e9d224851dc4b3c2643bbc5bac484d5d # trigger-argo-workflow/v2.0
-        with:
-          namespace: platform-monitoring-cd
-          workflow_template: azure-carbon-exporter
-          parameters: |
-            imageName=grafana/azure-carbon-exporter
-            dockertag=main-${{ steps.sha.outputs.short_sha }}
-            prCommentContext= Triggered by ${{ github.sha }} in grafana/sustainability-o11y
-            commit_author=grafana-delivery-bot
