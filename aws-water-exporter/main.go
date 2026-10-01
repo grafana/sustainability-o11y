@@ -25,6 +25,7 @@ type Config struct {
 	StartYear int
 
 	// S3 destination
+	S3Region string
 	S3Bucket string
 	S3Prefix string
 
@@ -54,6 +55,7 @@ func main() {
 	flag.StringVar(&config.AWSRegion, "aws.region", "us-east-1", "AWS region for the Sustainability API endpoint")
 	flag.IntVar(&config.StartYear, "start-year", awsWaterHistoryStartYear, "Earliest calendar year to query (absolute year, not a rolling window — AWS water history starts January 2023)")
 
+	flag.StringVar(&config.S3Region, "s3.region", "us-east-1", "AWS region of the S3 bucket — pinned explicitly rather than inferred from AWS_REGION, since the bucket's region isn't necessarily wherever the exporter happens to run")
 	flag.StringVar(&config.S3Bucket, "s3.bucket", "grafanalabs-billing-carbon", "S3 bucket to write water withdrawal data to")
 	flag.StringVar(&config.S3Prefix, "s3.prefix", "water", "S3 key prefix for exported data")
 
@@ -158,7 +160,7 @@ func run(ctx context.Context, config Config) error {
 		return nil
 	}
 
-	exporter, err := NewS3Exporter(ctx, config.S3Bucket, config.S3Prefix)
+	exporter, err := NewS3Exporter(ctx, config.S3Region, config.S3Bucket, config.S3Prefix)
 	if err != nil {
 		metrics.RecordError()
 		return fmt.Errorf("failed to create S3 exporter: %w", err)

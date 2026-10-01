@@ -23,8 +23,14 @@ type S3Exporter struct {
 	prefix string
 }
 
-func NewS3Exporter(ctx context.Context, bucket, prefix string) (*S3Exporter, error) {
-	cfg, err := config.LoadDefaultConfig(ctx)
+// NewS3Exporter takes region explicitly rather than relying on ambient
+// AWS_REGION resolution. The bucket's region isn't necessarily the same as
+// wherever the pod happens to run — in production, IRSA injects AWS_REGION
+// as the cluster's own region, which silently produced a cross-region S3
+// PermanentRedirect when it didn't match the bucket's real region. See
+// grafana/deployment_tools#745747.
+func NewS3Exporter(ctx context.Context, region, bucket, prefix string) (*S3Exporter, error) {
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
 	if err != nil {
 		return nil, fmt.Errorf("failed to load AWS config: %w", err)
 	}
