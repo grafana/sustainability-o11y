@@ -67,6 +67,7 @@ AWS_PROFILE=management ./aws-water-exporter --dry-run --log-level=debug
 |-----------|---------|-------------|
 | `--aws.region` | `us-east-1` | AWS region for the Sustainability API endpoint |
 | `--start-year` | `2023` | Earliest calendar year to query. An absolute year, not a rolling window — AWS's water history starts January 2023, and a relative "N years back" window silently loses history once the most recent year isn't published yet (see `client.go`'s `waterTimePeriod`) |
+| `--s3.region` | `us-east-1` | AWS region of the S3 bucket. Pinned explicitly rather than inferred from `AWS_REGION` — in production, IRSA injects that as the *cluster's* region, which isn't necessarily the bucket's region and previously caused a cross-region `PermanentRedirect` on upload |
 | `--s3.bucket` | `grafanalabs-billing-carbon` | S3 bucket to write water withdrawal data to |
 | `--s3.prefix` | `water` | S3 key prefix for exported data |
 | `--prom.pushgateway.url` | - | Prometheus Push Gateway URL (optional) |

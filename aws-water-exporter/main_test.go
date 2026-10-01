@@ -13,11 +13,15 @@ func TestConfigDefaults(t *testing.T) {
 	config := Config{
 		AWSRegion:      "us-east-1",
 		StartYear:      awsWaterHistoryStartYear,
+		S3Region:       "us-east-1",
 		S3Bucket:       "grafanalabs-billing-carbon",
 		S3Prefix:       "water",
 		PushGatewayJob: "aws-water-exporter",
 	}
 
+	if config.S3Region != "us-east-1" {
+		t.Errorf("Expected S3Region to be us-east-1, got %s", config.S3Region)
+	}
 	if config.S3Bucket != "grafanalabs-billing-carbon" {
 		t.Errorf("Expected S3Bucket to be grafanalabs-billing-carbon, got %s", config.S3Bucket)
 	}
