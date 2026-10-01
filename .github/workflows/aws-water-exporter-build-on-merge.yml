@@ -10,12 +10,6 @@ on:
 permissions:
   contents: read
 
-# No `deploy` job yet: unlike azure-carbon-exporter, there's no Argo
-# WorkflowTemplate named aws-water-exporter in deployment_tools to trigger
-# (the CronJob/Terraform side of this is still being built). This workflow
-# only builds and pushes the image, which is what deployment_tools' CD
-# pipeline needs to exist before that wiring can reference a real tag. Add
-# a `deploy` job mirroring build-on-merge.yml's once that template exists.
 jobs:
   build-and-export-digest:
     permissions:
@@ -78,3 +72,26 @@ jobs:
           tags: |
             type=raw,value=latest
             type=sha,prefix=main-,format=short
+
+  deploy:
+    needs: push-manifest
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    steps:
+      - name: Set short SHA
+        id: sha
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Argo Workflow
+        uses: grafana/shared-workflows/actions/trigger-argo-workflow@5a212d56e9d224851dc4b3c2643bbc5bac484d5d # trigger-argo-workflow/v2.0
+        with:
+          namespace: platform-monitoring-cd
+          workflow_template: aws-water-exporter
+          parameters: |
+            imageName=us-docker.pkg.dev/grafanalabs-global/dockerhub-sustainability-o11y-prod-mirror/aws-water-exporter
+            dockertag=main-${{ steps.sha.outputs.short_sha }}
+            prCommentContext= Triggered by ${{ github.sha }} in grafana/sustainability-o11y
+            commit_author=grafana-delivery-bot
