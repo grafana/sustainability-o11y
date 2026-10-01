@@ -12,11 +12,17 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// awsWaterHistoryStartYear is the first year AWS publishes water allocation
+// data for, per the Sustainability API docs. It's the default --start-year:
+// an absolute year, not a rolling window, so it never needs bumping as
+// calendar years pass (see the comment on FetchWaterWithdrawals).
+const awsWaterHistoryStartYear = 2023
+
 // Config holds the configuration for the exporter.
 type Config struct {
 	// AWS
-	AWSRegion  string
-	QueryYears int
+	AWSRegion string
+	StartYear int
 
 	// S3 destination
 	S3Bucket string
@@ -46,7 +52,7 @@ func main() {
 	var config Config
 
 	flag.StringVar(&config.AWSRegion, "aws.region", "us-east-1", "AWS region for the Sustainability API endpoint")
-	flag.IntVar(&config.QueryYears, "query-years", 2, "Number of calendar years to query, counting back from the current year")
+	flag.IntVar(&config.StartYear, "start-year", awsWaterHistoryStartYear, "Earliest calendar year to query (absolute year, not a rolling window — AWS water history starts January 2023)")
 
 	flag.StringVar(&config.S3Bucket, "s3.bucket", "grafanalabs-billing-carbon", "S3 bucket to write water withdrawal data to")
 	flag.StringVar(&config.S3Prefix, "s3.prefix", "water", "S3 key prefix for exported data")
@@ -98,7 +104,10 @@ func run(ctx context.Context, config Config) error {
 	metrics := NewMetricsCollector()
 	metrics.Register(prometheus.DefaultRegisterer)
 
-	exitCode := 0
+	// Push metrics on the way out regardless of outcome, then let run()
+	// return normally — os.Exit from inside a defer would terminate the
+	// process before this function's own return value ever reached main(),
+	// silently swallowing the real error.
 	defer func() {
 		pushConfig := PushGatewayConfig{
 			URL:     config.PushGatewayURL,
@@ -108,7 +117,6 @@ func run(ctx context.Context, config Config) error {
 		if err := metrics.PushMetrics(pushConfig); err != nil {
 			slog.Error("Failed to push metrics", "error", err)
 		}
-		os.Exit(exitCode)
 	}()
 
 	runStart := time.Now()
@@ -120,18 +128,16 @@ func run(ctx context.Context, config Config) error {
 	client, err := NewWaterAllocationClient(ctx, config.AWSRegion)
 	if err != nil {
 		metrics.RecordError()
-		exitCode = 1
 		return fmt.Errorf("failed to create AWS Sustainability client: %w", err)
 	}
 
-	slog.Info("Fetching water withdrawal estimates", "query_years", config.QueryYears)
+	slog.Info("Fetching water withdrawal estimates", "start_year", config.StartYear)
 	fetchTimer := metrics.TimedOperation("fetch_water_withdrawals")
 	metrics.RecordAPICall()
-	records, err := client.FetchWaterWithdrawals(ctx, config.QueryYears)
+	records, err := client.FetchWaterWithdrawals(ctx, config.StartYear)
 	fetchTimer()
 	if err != nil {
 		metrics.RecordError()
-		exitCode = 1
 		return fmt.Errorf("failed to fetch water withdrawals: %w", err)
 	}
 	slog.Info("Fetched water withdrawal estimates", "records", len(records))
@@ -155,7 +161,6 @@ func run(ctx context.Context, config Config) error {
 	exporter, err := NewS3Exporter(ctx, config.S3Bucket, config.S3Prefix)
 	if err != nil {
 		metrics.RecordError()
-		exitCode = 1
 		return fmt.Errorf("failed to create S3 exporter: %w", err)
 	}
 
@@ -164,7 +169,6 @@ func run(ctx context.Context, config Config) error {
 	exportTimer()
 	if err != nil {
 		metrics.RecordError()
-		exitCode = 1
 		return fmt.Errorf("failed to export records to S3: %w", err)
 	}
 	metrics.RecordS3Upload()

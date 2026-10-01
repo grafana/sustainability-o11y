@@ -42,17 +42,11 @@ func NewWaterAllocationClient(ctx context.Context, region string) (*WaterAllocat
 }
 
 // FetchWaterWithdrawals returns one row per (year, region, service)
-// combination, covering queryYears calendar years ending with the current
-// year. Granularity is fixed to YEARLY_CALENDAR because it's the only
-// granularity the API supports for water allocation.
-func (c *WaterAllocationClient) FetchWaterWithdrawals(ctx context.Context, queryYears int) ([]WaterRecord, error) {
-	if queryYears <= 0 {
-		queryYears = 1
-	}
-
-	now := time.Now().UTC()
-	start := time.Date(now.Year()-queryYears+1, 1, 1, 0, 0, 0, 0, time.UTC)
-	end := time.Date(now.Year()+1, 1, 1, 0, 0, 0, 0, time.UTC)
+// combination, covering every calendar year from startYear through the
+// current year. Granularity is fixed to YEARLY_CALENDAR because it's the
+// only granularity the API supports for water allocation.
+func (c *WaterAllocationClient) FetchWaterWithdrawals(ctx context.Context, startYear int) ([]WaterRecord, error) {
+	start, end := waterTimePeriod(startYear, time.Now().UTC())
 
 	input := &sustainability.GetEstimatedWaterAllocationInput{
 		TimePeriod: &types.TimePeriod{
@@ -83,13 +77,21 @@ func (c *WaterAllocationClient) FetchWaterWithdrawals(ctx context.Context, query
 	return records, nil
 }
 
+// waterTimePeriod computes the [start, end) range to request: startYear's
+// January 1st through January 1st of the year after now. startYear is used
+// as an absolute year (clamped to now's year if unset or in the future),
+// never as "now minus N years" — see the comment on FetchWaterWithdrawals
+// for why a relative window silently loses history.
+func waterTimePeriod(startYear int, now time.Time) (start, end time.Time) {
+	if startYear <= 0 || startYear > now.Year() {
+		startYear = now.Year()
+	}
+	start = time.Date(startYear, 1, 1, 0, 0, 0, 0, time.UTC)
+	end = time.Date(now.Year()+1, 1, 1, 0, 0, 0, 0, time.UTC)
+	return start, end
+}
+
 // toWaterRecord converts one API result into a WaterRecord.
-//
-// NOTE: the mapping from types.Dimension enum values ("REGION", "SERVICE") to
-// DimensionsValues map keys is inferred from the SDK's naming convention, not
-// confirmed against a live response — the API hasn't been callable from this
-// environment. Verify this against a real GetEstimatedWaterAllocation
-// response before relying on it.
 func toWaterRecord(result types.EstimatedWaterAllocation) (WaterRecord, bool) {
 	if result.TimePeriod == nil || result.TimePeriod.Start == nil {
 		return WaterRecord{}, false

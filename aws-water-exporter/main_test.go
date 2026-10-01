@@ -12,7 +12,7 @@ import (
 func TestConfigDefaults(t *testing.T) {
 	config := Config{
 		AWSRegion:      "us-east-1",
-		QueryYears:     2,
+		StartYear:      awsWaterHistoryStartYear,
 		S3Bucket:       "grafanalabs-billing-carbon",
 		S3Prefix:       "water",
 		PushGatewayJob: "aws-water-exporter",
@@ -94,10 +94,47 @@ func TestEncodeCSV(t *testing.T) {
 	}
 
 	out := string(body)
-	if !strings.HasPrefix(out, "year,region,service,model_version,total_water_withdrawals_m3\n") {
+	if !strings.HasPrefix(out, "region,service,model_version,total_water_withdrawals_m3\n") {
 		t.Errorf("Unexpected CSV header: %q", out)
 	}
-	if !strings.Contains(out, "2025,eu-south-2,AmazonEC2,v1.0.0,1757.8") {
+	// year must not appear in the body: it's a Hive partition column,
+	// encoded only in the S3 key (year=YYYY/), never in the file itself.
+	if strings.Contains(out, "2025,") {
+		t.Errorf("Expected no year column in CSV body, got: %q", out)
+	}
+	if !strings.Contains(out, "eu-south-2,AmazonEC2,v1.0.0,1757.8") {
 		t.Errorf("Expected row for eu-south-2 not found in: %q", out)
+	}
+}
+
+func TestWaterTimePeriod(t *testing.T) {
+	// Regression test for the off-by-one from the review: with the old
+	// "now minus N years" logic, querying from 2026 with queryYears=2
+	// produced a start of 2025 and silently dropped 2023/2024. The fixed
+	// version takes startYear as an absolute year, so the full documented
+	// history (2023 onward) is always requested regardless of the
+	// current year.
+	now := time.Date(2026, 10, 1, 0, 0, 0, 0, time.UTC)
+
+	start, end := waterTimePeriod(awsWaterHistoryStartYear, now)
+
+	wantStart := time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
+	wantEnd := time.Date(2027, 1, 1, 0, 0, 0, 0, time.UTC)
+	if !start.Equal(wantStart) {
+		t.Errorf("expected start %v, got %v", wantStart, start)
+	}
+	if !end.Equal(wantEnd) {
+		t.Errorf("expected end %v, got %v", wantEnd, end)
+	}
+}
+
+func TestWaterTimePeriodClampsFutureStartYear(t *testing.T) {
+	now := time.Date(2026, 10, 1, 0, 0, 0, 0, time.UTC)
+
+	start, _ := waterTimePeriod(2030, now)
+
+	wantStart := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	if !start.Equal(wantStart) {
+		t.Errorf("expected a startYear after now to clamp to now's year (%v), got %v", wantStart, start)
 	}
 }

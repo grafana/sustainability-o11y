@@ -65,17 +65,22 @@ func (e *S3Exporter) ExportRecords(ctx context.Context, records []WaterRecord) e
 	return nil
 }
 
+// encodeCSV writes every column except year. year is a Hive partition
+// column (it's encoded in the S3 key as year=YYYY/), and a partition
+// column must be absent from the file itself — Glue/Athena derive its value
+// from the path. Writing it as a body column too shifts every other column
+// over by one when Athena reads the file against the table's non-partition
+// schema (region read as the partition's value, service read as region, …).
 func encodeCSV(records []WaterRecord) ([]byte, error) {
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
 
-	if err := w.Write([]string{"year", "region", "service", "model_version", "total_water_withdrawals_m3"}); err != nil {
+	if err := w.Write([]string{"region", "service", "model_version", "total_water_withdrawals_m3"}); err != nil {
 		return nil, err
 	}
 
 	for _, r := range records {
 		row := []string{
-			strconv.Itoa(r.Year),
 			r.Region,
 			r.Service,
 			r.ModelVersion,
