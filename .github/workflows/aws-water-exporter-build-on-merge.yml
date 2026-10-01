@@ -1,0 +1,80 @@
+name: Build and Push on Merge (aws-water-exporter)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "aws-water-exporter/**"
+
+permissions:
+  contents: read
+
+# No `deploy` job yet: unlike azure-carbon-exporter, there's no Argo
+# WorkflowTemplate named aws-water-exporter in deployment_tools to trigger
+# (the CronJob/Terraform side of this is still being built). This workflow
+# only builds and pushes the image, which is what deployment_tools' CD
+# pipeline needs to exist before that wiring can reference a real tag. Add
+# a `deploy` job mirroring build-on-merge.yml's once that template exists.
+jobs:
+  build-and-export-digest:
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      images: ${{ steps.build.outputs.images }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runnerType: ubuntu-24.04-arm
+            platform: linux/arm64
+          - runnerType: ubuntu-24.04
+            platform: linux/amd64
+    runs-on: ${{ matrix.runnerType }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build and Push Image
+        id: build
+        uses: grafana/shared-workflows/actions/docker-build-push-image@c66d74df41cf4ed28a90da1d91c263f9d1609a21 # docker-build-push-image/v0.3.4
+        with:
+          registries: gar
+          gar-environment: prod
+          gar-image: aws-water-exporter
+          gar-repository: dockerhub-sustainability-o11y-prod-mirror
+          platforms: ${{ matrix.platform }}
+          context: aws-water-exporter
+          file: aws-water-exporter/Dockerfile
+          outputs: "type=image,push-by-digest=true,name-canonical=true,push=true"
+          push: true
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=main-,format=short
+          include-tags-in-push: false
+
+      - name: Export Docker Digest
+        uses: grafana/shared-workflows/actions/docker-export-digest@438c8d6321147607b3f6f0e922508e78e746af9b # docker-export-digest/v0.3.1
+        with:
+          digest: ${{ steps.build.outputs.digest }}
+          platform: ${{ matrix.platform }}
+
+  push-manifest:
+    needs: build-and-export-digest
+    runs-on: ubuntu-26.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Push Multi-Arch Manifest
+        uses: grafana/shared-workflows/actions/docker-import-digests-push-manifest@438c8d6321147607b3f6f0e922508e78e746af9b # docker-import-digests-push-manifest/v0.3.1
+        with:
+          gar-environment: prod
+          images: ${{ needs.build-and-export-digest.outputs.images }}
+          push: true
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=main-,format=short
