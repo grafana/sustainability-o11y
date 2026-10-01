@@ -9,8 +9,10 @@ runs:
   using: composite
   steps:
     - id: goversion
+      env:
+        COMPONENT_DIR: ${{ inputs.component-dir }}
       run: |
-        cat ${{ inputs.component-dir }}/Dockerfile | awk 'BEGIN{IGNORECASE=1} /^FROM golang:.* AS builder$/ {v=$2;split(v,a,":|-|@")}; END {printf("version=%s", a[2])}' >> $GITHUB_OUTPUT
+        cat "$COMPONENT_DIR/Dockerfile" | awk 'BEGIN{IGNORECASE=1} /^FROM golang:.* AS builder$/ {v=$2;split(v,a,":|-|@")}; END {printf("version=%s", a[2])}' >> "$GITHUB_OUTPUT"
       shell: bash
     - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
       with:
