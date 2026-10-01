@@ -1,4 +1,4 @@
-name: Build and Push on Merge
+name: Build and Push on Merge (azure-carbon-exporter)
 
 on:
   push:
