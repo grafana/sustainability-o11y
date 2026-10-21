@@ -1,6 +1,6 @@
 module github.com/grafana/sustainability-o11y/azure-carbon-exporter
 
-go 1.26.0
+go 1.27.3
 
 require (
 	cloud.google.com/go v0.123.0
