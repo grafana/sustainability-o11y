@@ -64,7 +64,7 @@ jobs:
       id-token: write
     steps:
       - name: Push Multi-Arch Manifest
-        uses: grafana/shared-workflows/actions/docker-import-digests-push-manifest@438c8d6321147607b3f6f0e922508e78e746af9b # docker-import-digests-push-manifest/v0.3.1
+        uses: grafana/shared-workflows/actions/docker-import-digests-push-manifest@b99aaefe514b9e1623eadbfa0da38f1e02a19d10 # docker-import-digests-push-manifest/v1.0
         with:
           gar-environment: prod
           images: ${{ needs.build-and-export-digest.outputs.images }}
